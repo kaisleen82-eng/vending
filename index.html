@@ -197,7 +197,6 @@ input.num:focus{border-color:var(--pink);box-shadow:0 0 0 3px var(--pink-glow)}
 <div class="login-error" id="loginError"></div>
 </div>
 </div>
-</div>
 <div class="dashboard" id="dashboard">
 <div class="dash-row">
 <div class="sidebar">
@@ -587,6 +586,7 @@ input.num:focus{border-color:var(--pink);box-shadow:0 0 0 3px var(--pink-glow)}
 <button class="gen-btn" id="genBtn">Generate &amp; Copy Script</button>
 <div class="section-title">Output</div>
 <div class="code-block" id="codeOutput">-- Click "Generate & Copy Script" to generate your configured script</div>
+</div>
 </div>
 </div>
 </div>
@@ -1136,8 +1136,7 @@ end)
 </script>
 <script>
 (function(){
-const API_BASE = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
-    ? 'http://localhost:5000' : '';
+const API_BASE = '';
 
 const loginScreen = document.getElementById('loginScreen');
 const dashboard = document.getElementById('dashboard');
@@ -1240,16 +1239,9 @@ function doLogin() {
         }
     })
     .catch((e) => {
-        currentKey = key;
-        currentUser = username;
-        loginScreen.style.display = 'none';
-        dashboard.style.display = 'flex';
-        syncUIToConfig();
-        document.getElementById('topbarName').textContent = username;
-        document.getElementById('topbarAvatar').textContent = username.charAt(0).toUpperCase();
-        document.getElementById('sidebarUserName').textContent = username;
-        document.getElementById('sidebarAvatar').textContent = username.charAt(0).toUpperCase();
-        showToast('Logged in offline (server unavailable)', 'success');
+        loginError.textContent = 'Server unavailable. Try again later.';
+        loginError.style.color = '#ef4444';
+        setTimeout(() => { loginError.textContent = ''; }, 4000);
     });
 }
 
