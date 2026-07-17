@@ -145,8 +145,8 @@
     "redeemed_at": null,
     "revoked": false,
     "note": "",
-    "username": null,
-    "password": null,
-    "registered": false
+    "username": "imtesting",
+    "password": "707c54b045f55328257d667ad96e88507e77adfdbf62cb0ef0f1c71929a7f90d",
+    "registered": true
   }
 }
