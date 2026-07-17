@@ -363,20 +363,20 @@ input.num:focus{border-color:var(--pink);box-shadow:0 0 0 3px var(--pink-glow)}
 <div class="section-title" style="margin-top:20px">Weapon Skins</div>
 <div class="setting-row">
 <div><div class="setting-label">Double-Barrel SG</div></div>
-<div class="setting-control"><select class="sel" id="sk-db" data-config="skins.db"><option>Galaxy</option><option>Valentine</option><option>Shadow</option><option>Fade</option><option>Crimson</option><option>None</option></select></div>
+<div class="setting-control"><select class="sel" id="sk-db" data-config="skins.db"><option>Galaxy</option><option>Valentine</option><option>Shadow</option><option>Angry-Hero</option><option>Electric</option><option>Glassy</option><option>Luck</option><option>Inferno</option><option>8-BIT</option><option>None</option></select></div>
 </div>
 <div class="setting-row">
 <div><div class="setting-label">Revolver</div></div>
-<div class="setting-control"><select class="sel" id="sk-rev" data-config="skins.rev"><option>Galaxy</option><option>Valentine</option><option>Shadow</option><option>Fade</option><option>None</option></select></div>
+<div class="setting-control"><select class="sel" id="sk-rev" data-config="skins.rev"><option>Galaxy</option><option>Valentine</option><option>Shadow</option><option>Luck</option><option>Inferno</option><option>Electric</option><option>Glassy</option><option>8-BIT</option><option>None</option></select></div>
 </div>
 <div class="setting-row">
 <div><div class="setting-label">Tactical Shotgun</div></div>
-<div class="setting-control"><select class="sel" id="sk-tac" data-config="skins.tac"><option>Galaxy</option><option>Valentine</option><option>Shadow</option><option>Fade</option><option>None</option></select></div>
+<div class="setting-control"><select class="sel" id="sk-tac" data-config="skins.tac"><option>Galaxy</option><option>Valentine</option><option>Shadow</option><option>Luck</option><option>Inferno</option><option>Electric</option><option>Glassy</option><option>None</option></select></div>
 </div>
 <div class="section-title" style="margin-top:20px">Knife Skin</div>
 <div class="setting-row">
 <div><div class="setting-label">Knife</div></div>
-<div class="setting-control"><select class="sel" id="sk-knife" data-config="skins.knife"><option>Emerald</option><option>Love Kukri</option><option>Dragon</option><option>Void</option><option>Heaven</option><option>Wild West</option><option>Iced Out</option><option>Purple Dagger</option><option>Blue Dagger</option><option>Red Dagger</option><option>Green Dagger</option><option>Portal</option><option>Emerald Butterfly</option><option>Reptile</option><option>Boy</option><option>Girl</option><option>Golden Age Tanto</option><option>Serpent</option><option>Darkheart</option><option>Blood</option></select></div>
+<div class="setting-control"><select class="sel" id="sk-knife" data-config="skins.knife"><option>Emerald</option><option>Love Kukri</option><option>Dragon</option><option>Void</option><option>Heaven</option><option>Wild West</option><option>Iced Out</option><option>Purple Dagger</option><option>Blue Dagger</option><option>Red Dagger</option><option>Green Dagger</option><option>Portal</option><option>Emerald Butterfly</option><option>Reptile</option><option>Boy</option><option>Girl</option><option>Golden Age Tanto</option><option>GPO-Knife</option><option>GPO-Knife Prestige</option><option>None</option></select></div>
 </div>
 </div>
 </div>
@@ -1262,7 +1262,7 @@ function showToast(msg, type) {
     setTimeout(() => { t.classList.remove('show'); setTimeout(() => t.remove(), 400); }, 3000);
 }
 function buildConfigHeader() {
-    const s = C.silent, c = C.camera, t = C.trigger, sp = C.spread, h = C.hitbox, m = C.macro, n = C.noclip, co = C.cond;
+    const s = C.silent, c = C.camera, t = C.trigger, sp = C.spread, h = C.hitbox, m = C.macro, n = C.noclip, sk = C.skins, co = C.cond;
     return `Config = {
     ['Conditions'] = {
         Knocked = ${co.knocked},
@@ -1340,6 +1340,17 @@ function buildConfigHeader() {
         ['Keybind'] = { Key = '${n.key}', Mode = '${n.bindMode}' },
         ['Delay'] = ${n.delay},
         ['Slot'] = ${n.slot},
+    },
+}
+
+shared.Saved = shared.Saved or {}
+shared.Saved['Skin Changer'] = {
+    Enabled = ${sk.enabled},
+    Skins = {
+        ['[Double-Barrel SG]'] = '${sk.db}',
+        ['[Revolver]'] = '${sk.rev}',
+        ['[TacticalShotgun]'] = '${sk.tac}',
+        ['[Knife]'] = '${sk.knife}',
     },
 }
 `;
