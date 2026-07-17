@@ -6,4 +6,13 @@ dist/
 *.spec
 *.exe
 config.py
+bot.py
+keys.py
+crypto.py
+hwid.py
+server.py
+gui_app.py
+main.py
+luabody.txt
+requirements.txt
 *.bat
