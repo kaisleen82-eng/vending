@@ -970,3 +970,7 @@ def run_bot():
         print("ERROR: Set VENDING_BOT_TOKEN environment variable")
         sys.exit(1)
     bot.run(BOT_TOKEN)
+
+
+if __name__ == "__main__":
+    run_bot()
