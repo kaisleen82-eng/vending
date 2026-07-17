@@ -4,112 +4,182 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>VENDING</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-:root{--pink:#e94b9e;--pink-dark:#c73680;--pink-light:#f7a8d8;--bg:#0e0e14;--bg2:#111118;--bg3:#1a1a2a;--card:rgba(26,26,42,0.85);--text:#e0e0e0;--text-dim:#666;--border:rgba(255,255,255,0.06);--radius:12px}
-body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);overflow:hidden;height:100vh;width:100vw}
-canvas#snow{position:fixed;top:0;left:0;width:100%;height:100%;z-index:0;pointer-events:none}
+:root{
+  --pink:#e94b9e;--pink-dark:#c73680;--pink-glow:rgba(233,75,158,0.15);--pink-border:rgba(233,75,158,0.25);
+  --bg:#08080c;--bg1:#0c0c14;--bg2:#10101c;--bg3:#16162a;--bg4:#1c1c34;
+  --surface:rgba(16,16,28,0.8);--surface-hover:rgba(22,22,42,0.9);--surface-active:rgba(28,28,52,0.95);
+  --text:#e4e4ec;--text-dim:#6b6b80;--text-muted:#44445a;
+  --border:rgba(255,255,255,0.05);--border-light:rgba(255,255,255,0.08);
+  --radius:14px;--radius-sm:10px;--radius-xs:8px;
+  --shadow-sm:0 2px 8px rgba(0,0,0,0.2);--shadow-md:0 4px 20px rgba(0,0,0,0.3);--shadow-lg:0 8px 40px rgba(0,0,0,0.4);
+  --transition:0.25s cubic-bezier(0.4,0,0.2,1);
+}
+body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--text);overflow:hidden;height:100vh;width:100vw;-webkit-font-smoothing:antialiased}
+
+.bg-mesh{position:fixed;top:0;left:0;width:100%;height:100%;z-index:0;pointer-events:none;overflow:hidden}
+.bg-mesh::before{content:'';position:absolute;top:-20%;left:-10%;width:50%;height:50%;background:radial-gradient(circle,rgba(233,75,158,0.06) 0%,transparent 70%);animation:meshFloat1 25s ease-in-out infinite}
+.bg-mesh::after{content:'';position:absolute;bottom:-10%;right:-10%;width:45%;height:45%;background:radial-gradient(circle,rgba(130,80,220,0.04) 0%,transparent 70%);animation:meshFloat2 30s ease-in-out infinite}
+@keyframes meshFloat1{0%,100%{transform:translate(0,0)}50%{transform:translate(8%,12%)}}
+@keyframes meshFloat2{0%,100%{transform:translate(0,0)}50%{transform:translate(-10%,-8%)}}
+
 #app{position:relative;z-index:1;width:100%;height:100%}
 
+/* ── Login ── */
 .login-screen{display:flex;align-items:center;justify-content:center;width:100%;height:100%}
-.login-card{background:var(--bg3);border:1px solid var(--border);border-radius:16px;padding:48px 40px;width:420px;text-align:center;position:relative;animation:fadeUp .5s ease;transition:border-color .3s}
-.login-card:hover{border-color:rgba(233,75,158,0.3)}
-@keyframes fadeUp{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:translateY(0)}}
-@keyframes fadeIn{from{opacity:0}to{opacity:1}}
-.login-close{position:absolute;top:16px;right:20px;color:#555;font-size:18px;cursor:pointer;transition:color .2s}
-.login-close:hover{color:#fff}
-.login-logo{width:56px;height:56px;border-radius:14px;object-fit:cover;margin:0 auto 20px;display:block}
-.login-title{font-size:24px;font-weight:700;margin-bottom:4px;color:#fff}
-.login-sub{font-size:13px;color:var(--text-dim);margin-bottom:32px}
-.login-field-wrap{position:relative;margin-bottom:14px}
-.login-field-icon{position:absolute;left:14px;top:50%;transform:translateY(-50%);color:#555;font-size:14px;pointer-events:none}
-.login-field{width:100%;padding:14px 14px 14px 42px;background:#111118;border:1px solid rgba(255,255,255,0.08);border-radius:10px;color:#fff;font-family:'Inter',sans-serif;font-size:14px;letter-spacing:1px;outline:none;transition:all .3s}
-.login-field::placeholder{color:#444;letter-spacing:0.5px}
-.login-field:focus{border-color:var(--pink);box-shadow:0 0 20px rgba(233,75,158,0.1)}
-.login-btn{width:100%;padding:14px;margin-top:4px;border:none;border-radius:10px;background:linear-gradient(135deg,var(--pink),var(--pink-dark));color:#fff;font-family:'Inter',sans-serif;font-size:15px;font-weight:600;cursor:pointer;transition:all .3s;letter-spacing:1px}
-.login-btn:hover{transform:translateY(-1px);box-shadow:0 8px 24px rgba(233,75,158,0.35)}
+.login-card{display:flex;width:840px;min-height:480px;background:var(--bg2);border:1px solid var(--border);border-radius:20px;overflow:hidden;animation:fadeUp .6s cubic-bezier(0.16,1,0.3,1);box-shadow:var(--shadow-lg)}
+@keyframes fadeUp{from{opacity:0;transform:translateY(40px) scale(0.97)}to{opacity:1;transform:translateY(0) scale(1)}}
+.login-left{flex:1;background:linear-gradient(135deg,rgba(233,75,158,0.08),rgba(130,80,220,0.06));display:flex;flex-direction:column;align-items:center;justify-content:center;padding:48px;border-right:1px solid var(--border);position:relative;overflow:hidden}
+.login-left::before{content:'';position:absolute;top:-50%;left:-50%;width:200%;height:200%;background:conic-gradient(from 0deg at 50% 50%,transparent 0deg,rgba(233,75,158,0.03) 60deg,transparent 120deg);animation:rotateSlow 20s linear infinite}
+@keyframes rotateSlow{from{transform:rotate(0)}to{transform:rotate(360deg)}}
+.login-left img{width:80px;height:80px;border-radius:18px;position:relative;z-index:1;box-shadow:0 4px 20px rgba(233,75,158,0.2)}
+.login-left h2{font-size:28px;font-weight:800;margin-top:24px;position:relative;z-index:1;background:linear-gradient(135deg,#fff,var(--pink-light));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.login-left p{font-size:13px;color:var(--text-dim);margin-top:8px;position:relative;z-index:1}
+.login-right{flex:1;display:flex;flex-direction:column;justify-content:center;padding:48px 40px}
+.login-right h3{font-size:22px;font-weight:700;color:#fff;margin-bottom:4px}
+.login-right .login-sub{font-size:13px;color:var(--text-dim);margin-bottom:32px}
+.login-field-wrap{position:relative;margin-bottom:16px}
+.login-field-icon{position:absolute;left:14px;top:50%;transform:translateY(-50%);color:var(--text-muted);font-size:14px;pointer-events:none}
+.login-field{width:100%;padding:13px 14px 13px 42px;background:var(--bg);border:1px solid var(--border-light);border-radius:var(--radius-xs);color:#fff;font-family:'Inter',sans-serif;font-size:14px;outline:none;transition:var(--transition)}
+.login-field::placeholder{color:var(--text-muted)}
+.login-field:focus{border-color:var(--pink);box-shadow:0 0 0 3px var(--pink-glow)}
+.login-btn{width:100%;padding:13px;margin-top:6px;border:none;border-radius:var(--radius-xs);background:linear-gradient(135deg,var(--pink),var(--pink-dark));color:#fff;font-family:'Inter',sans-serif;font-size:14px;font-weight:600;cursor:pointer;transition:var(--transition);letter-spacing:0.5px;position:relative;overflow:hidden}
+.login-btn::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,255,255,0.1),transparent);opacity:0;transition:var(--transition)}
+.login-btn:hover{transform:translateY(-1px);box-shadow:0 6px 24px rgba(233,75,158,0.35)}
+.login-btn:hover::before{opacity:1}
 .login-btn:active{transform:translateY(0)}
-.login-link{display:block;margin-top:16px;color:var(--pink);font-size:12px;text-decoration:none;transition:opacity .2s}
-.login-link:hover{opacity:0.8}
-.login-error{color:#ef4444;font-size:12px;margin-top:10px;min-height:18px}
+.login-link{display:block;margin-top:14px;color:var(--text-dim);font-size:12px;text-decoration:none;transition:color var(--transition);text-align:center}
+.login-link:hover{color:var(--pink)}
+.login-error{color:#ef4444;font-size:12px;margin-top:10px;min-height:16px;text-align:center}
 
-.dashboard{display:none;width:100%;height:100%;flex-direction:column;animation:fadeIn .4s ease}
+/* ── Dashboard Layout ── */
+.dashboard{display:none;width:100%;height:100%;flex-direction:column;animation:fadeIn .5s ease}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
 .dash-row{display:flex;flex:1;overflow:hidden}
-.sidebar{width:200px;min-width:200px;background:var(--bg2);border-right:1px solid var(--border);display:flex;flex-direction:column;height:100%;overflow:hidden}
-.sidebar-logo{padding:16px;display:flex;align-items:center;gap:10px}
-.sidebar-logo .v-logo-img{width:28px;height:28px;border-radius:7px;object-fit:cover;flex-shrink:0}
-.sidebar-logo .v-title{font-size:13px;font-weight:700;letter-spacing:3px;color:#fff}
-.sidebar-search{padding:0 12px 10px}
-.sidebar-search input{width:100%;padding:8px 12px 8px 32px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:8px;color:#fff;font-family:'Inter',sans-serif;font-size:12px;outline:none;transition:all .3s;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%23666' stroke-width='2'%3E%3Ccircle cx='11' cy='11' r='8'/%3E%3Cline x1='21' y1='21' x2='16.65' y2='16.65'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:10px center}
-.sidebar-search input:focus{border-color:var(--pink);box-shadow:0 0 12px rgba(233,75,158,0.1)}
-.sidebar-search input::placeholder{color:#444}
-.sidebar-nav{flex:1;overflow-y:auto;padding:0 12px}
+
+/* ── Sidebar ── */
+.sidebar{width:220px;min-width:220px;background:var(--bg1);border-right:1px solid var(--border);display:flex;flex-direction:column;height:100%;overflow:hidden}
+.sidebar-header{padding:20px 16px 12px;display:flex;align-items:center;gap:12px}
+.sidebar-header img{width:32px;height:32px;border-radius:9px;flex-shrink:0;box-shadow:0 2px 8px rgba(233,75,158,0.15)}
+.sidebar-header .brand{font-size:14px;font-weight:800;letter-spacing:3px;color:#fff}
+.sidebar-header .brand-dot{color:var(--pink)}
+.sidebar-search{padding:0 12px 14px}
+.sidebar-search input{width:100%;padding:9px 12px 9px 34px;background:var(--bg);border:1px solid var(--border);border-radius:var(--radius-xs);color:#fff;font-family:'Inter',sans-serif;font-size:12px;outline:none;transition:var(--transition);background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%2344445a' stroke-width='2'%3E%3Ccircle cx='11' cy='11' r='8'/%3E%3Cline x1='21' y1='21' x2='16.65' y2='16.65'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:11px center}
+.sidebar-search input:focus{border-color:var(--pink);box-shadow:0 0 0 3px var(--pink-glow)}
+.sidebar-search input::placeholder{color:var(--text-muted)}
+.sidebar-nav{flex:1;overflow-y:auto;padding:0 8px}
 .sidebar-nav::-webkit-scrollbar{width:3px}
-.sidebar-nav::-webkit-scrollbar-thumb{background:rgba(233,75,158,0.2);border-radius:4px}
-.nav-item{padding:8px 16px;border-radius:8px;cursor:pointer;font-size:12px;font-weight:500;color:var(--text-dim);transition:color .2s;margin-bottom:1px;white-space:nowrap}
-.nav-item:hover{color:var(--pink)}
-.nav-item.active{color:var(--pink)}
+.sidebar-nav::-webkit-scrollbar-thumb{background:rgba(233,75,158,0.15);border-radius:4px}
+.nav-group{margin-bottom:16px}
+.nav-group-label{font-size:10px;font-weight:700;letter-spacing:2px;color:var(--text-muted);text-transform:uppercase;padding:0 12px 6px}
+.nav-item{padding:9px 14px;border-radius:var(--radius-xs);cursor:pointer;font-size:12.5px;font-weight:500;color:var(--text-dim);transition:var(--transition);margin-bottom:1px;display:flex;align-items:center;gap:10px;position:relative}
+.nav-item::before{content:'';width:4px;height:4px;border-radius:50%;background:var(--text-muted);transition:var(--transition);flex-shrink:0}
+.nav-item:hover{color:var(--text);background:rgba(255,255,255,0.03)}
+.nav-item:hover::before{background:var(--pink)}
+.nav-item.active{color:var(--pink);background:var(--pink-glow)}
+.nav-item.active::before{background:var(--pink);box-shadow:0 0 6px var(--pink)}
+.sidebar-footer{padding:12px;border-top:1px solid var(--border)}
+.sidebar-user{display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:var(--radius-xs);background:rgba(255,255,255,0.02)}
+.sidebar-user-avatar{width:30px;height:30px;border-radius:50%;background:linear-gradient(135deg,var(--pink),var(--pink-dark));display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:#fff;flex-shrink:0}
+.sidebar-user-info{flex:1;min-width:0}
+.sidebar-user-name{font-size:12px;font-weight:600;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sidebar-user-status{font-size:10px;color:#22c55e;display:flex;align-items:center;gap:4px}
+.sidebar-user-status::before{content:'';width:5px;height:5px;border-radius:50%;background:#22c55e}
 
-.topbar{height:56px;min-height:56px;background:var(--bg2);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 32px}
-.topbar-title{font-size:16px;font-weight:600;color:#fff}
-.topbar-profile{display:flex;align-items:center;gap:10px;cursor:pointer;padding:6px 12px;border-radius:8px;transition:background .2s}
+/* ── Topbar ── */
+.topbar-area{display:flex;flex-direction:column;overflow:hidden}
+.topbar{height:56px;min-height:56px;background:var(--bg1);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 28px}
+.topbar-left{display:flex;align-items:center;gap:12px}
+.topbar-title{font-size:15px;font-weight:600;color:#fff}
+.topbar-breadcrumb{font-size:12px;color:var(--text-dim)}
+.topbar-right{display:flex;align-items:center;gap:12px}
+.topbar-badge{padding:4px 10px;border-radius:20px;font-size:11px;font-weight:600;background:var(--pink-glow);color:var(--pink);border:1px solid var(--pink-border)}
+.topbar-profile{display:flex;align-items:center;gap:8px;cursor:pointer;padding:5px 10px;border-radius:var(--radius-xs);transition:background var(--transition)}
 .topbar-profile:hover{background:rgba(255,255,255,0.04)}
-.topbar-avatar{width:32px;height:32px;border-radius:50%;object-fit:cover;background:linear-gradient(135deg,var(--pink),var(--pink-dark));display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:#fff;overflow:hidden}
-.topbar-avatar img{width:100%;height:100%;object-fit:cover}
-.topbar-name{font-size:13px;font-weight:500;color:#ccc}
-.topbar-arrow{font-size:10px;color:#666;transition:transform .2s}
+.topbar-avatar{width:30px;height:30px;border-radius:50%;background:linear-gradient(135deg,var(--pink),var(--pink-dark));display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:#fff}
+.topbar-name{font-size:13px;font-weight:500;color:var(--text)}
+.topbar-arrow{font-size:9px;color:var(--text-muted);transition:transform var(--transition)}
 
-.content{flex:1;overflow-y:auto;padding:32px 40px;height:100%}
-.content::-webkit-scrollbar{width:6px}
-.content::-webkit-scrollbar-thumb{background:rgba(233,75,158,0.2);border-radius:4px}
-.page{display:none;animation:fadeUp .3s ease}
+/* ── Content ── */
+.content{flex:1;overflow-y:auto;padding:28px 32px;height:100%;scroll-behavior:smooth}
+.content::-webkit-scrollbar{width:5px}
+.content::-webkit-scrollbar-track{background:transparent}
+.content::-webkit-scrollbar-thumb{background:rgba(233,75,158,0.15);border-radius:4px}
+.content::-webkit-scrollbar-thumb:hover{background:rgba(233,75,158,0.25)}
+.page{display:none;animation:pageIn .35s ease}
 .page.active{display:block}
-.page-header{margin-bottom:28px}
-.page-header h2{font-size:22px;font-weight:700;margin-bottom:4px;color:#fff}
+@keyframes pageIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.page-header{margin-bottom:24px}
+.page-header h2{font-size:22px;font-weight:800;color:#fff;margin-bottom:4px;letter-spacing:-0.3px}
 .page-header p{font-size:13px;color:var(--text-dim)}
-.settings-panel{background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius);padding:24px;margin-bottom:20px}
-.section-title{font-size:11px;font-weight:600;letter-spacing:2px;color:var(--pink);text-transform:uppercase;margin-bottom:16px}
-.setting-row{display:flex;align-items:center;justify-content:space-between;padding:12px 0;border-bottom:1px solid rgba(255,255,255,0.04)}
+
+/* ── Settings Panel ── */
+.settings-panel{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:24px;margin-bottom:16px;backdrop-filter:blur(12px)}
+.section-title{font-size:10px;font-weight:700;letter-spacing:2.5px;color:var(--pink);text-transform:uppercase;margin-bottom:14px;display:flex;align-items:center;gap:8px}
+.section-title::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,var(--pink-border),transparent)}
+.setting-row{display:flex;align-items:center;justify-content:space-between;padding:13px 0;border-bottom:1px solid rgba(255,255,255,0.03)}
 .setting-row:last-child{border-bottom:none}
-.setting-label{font-size:14px;font-weight:500;color:#ddd}
+.setting-label{font-size:13.5px;font-weight:500;color:var(--text)}
 .setting-desc{font-size:11px;color:var(--text-dim);margin-top:2px}
 .setting-control{display:flex;align-items:center;gap:10px;flex-shrink:0}
-.toggle{position:relative;width:44px;height:24px;cursor:pointer;display:inline-block}
+
+/* ── Toggle ── */
+.toggle{position:relative;width:42px;height:22px;cursor:pointer;display:inline-block}
 .toggle input{display:none}
-.toggle-slider{position:absolute;inset:0;background:#333;border-radius:12px;transition:all .3s}
-.toggle-slider::before{content:'';position:absolute;width:18px;height:18px;left:3px;top:3px;background:#666;border-radius:50%;transition:all .3s}
-.toggle input:checked+.toggle-slider{background:var(--pink)}
-.toggle input:checked+.toggle-slider::before{transform:translateX(20px);background:#fff}
-select.sel{appearance:none;-webkit-appearance:none;padding:8px 32px 8px 14px;background:rgba(255,255,255,0.04) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23666' fill='none' stroke-width='1.5'/%3E%3C/svg%3E") no-repeat right 10px center;border:1px solid rgba(255,255,255,0.08);border-radius:8px;color:#fff;font-family:'Inter',sans-serif;font-size:13px;cursor:pointer;outline:none;transition:all .3s;min-width:140px}
+.toggle-slider{position:absolute;inset:0;background:var(--bg);border:1px solid var(--border-light);border-radius:11px;transition:var(--transition)}
+.toggle-slider::before{content:'';position:absolute;width:16px;height:16px;left:2px;top:2px;background:var(--text-muted);border-radius:50%;transition:var(--transition)}
+.toggle input:checked+.toggle-slider{background:var(--pink);border-color:var(--pink)}
+.toggle input:checked+.toggle-slider::before{transform:translateX(20px);background:#fff;box-shadow:0 2px 6px rgba(0,0,0,0.2)}
+
+/* ── Select ── */
+select.sel{appearance:none;-webkit-appearance:none;padding:8px 32px 8px 12px;background:var(--bg) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%2344445a' fill='none' stroke-width='1.5'/%3E%3C/svg%3E") no-repeat right 10px center;border:1px solid var(--border-light);border-radius:var(--radius-xs);color:#fff;font-family:'Inter',sans-serif;font-size:12.5px;cursor:pointer;outline:none;transition:var(--transition);min-width:130px}
 select.sel:hover{border-color:var(--pink)}
-select.sel:focus{border-color:var(--pink);box-shadow:0 0 12px rgba(233,75,158,0.1)}
+select.sel:focus{border-color:var(--pink);box-shadow:0 0 0 3px var(--pink-glow)}
 select.sel option{background:var(--bg3);color:#fff}
-input.num{width:80px;padding:8px 12px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:8px;color:#fff;font-family:'Inter',sans-serif;font-size:13px;outline:none;transition:all .3s;text-align:center}
+
+/* ── Number Input ── */
+input.num{width:76px;padding:8px 10px;background:var(--bg);border:1px solid var(--border-light);border-radius:var(--radius-xs);color:#fff;font-family:'Inter',sans-serif;font-size:12.5px;outline:none;transition:var(--transition);text-align:center}
 input.num:hover{border-color:var(--pink)}
-input.num:focus{border-color:var(--pink);box-shadow:0 0 12px rgba(233,75,158,0.1)}
-.gen-btn{width:100%;padding:18px;border:none;border-radius:12px;background:linear-gradient(135deg,var(--pink),var(--pink-dark));color:#fff;font-family:'Inter',sans-serif;font-size:16px;font-weight:700;letter-spacing:2px;cursor:pointer;transition:all .3s;text-transform:uppercase;margin-bottom:20px}
-.gen-btn:hover{transform:translateY(-2px);box-shadow:0 8px 32px rgba(233,75,158,0.4)}
+input.num:focus{border-color:var(--pink);box-shadow:0 0 0 3px var(--pink-glow)}
+
+/* ── Generate Button ── */
+.gen-btn{width:100%;padding:16px;border:none;border-radius:var(--radius);background:linear-gradient(135deg,var(--pink),var(--pink-dark));color:#fff;font-family:'Inter',sans-serif;font-size:14px;font-weight:700;letter-spacing:1.5px;cursor:pointer;transition:var(--transition);text-transform:uppercase;position:relative;overflow:hidden}
+.gen-btn::before{content:'';position:absolute;top:0;left:-100%;width:100%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,0.1),transparent);transition:0.5s}
+.gen-btn:hover{transform:translateY(-2px);box-shadow:0 8px 32px rgba(233,75,158,0.35)}
+.gen-btn:hover::before{left:100%}
 .gen-btn:active{transform:translateY(0)}
-.gen-btn:disabled{opacity:0.6;cursor:not-allowed;transform:none}
-.code-block{background:rgba(0,0,0,0.5);border:1px solid var(--border);border-radius:var(--radius);padding:20px;max-height:400px;overflow:auto;font-family:'Courier New',monospace;font-size:12px;line-height:1.6;color:#aaa;white-space:pre-wrap;word-break:break-all}
+.gen-btn:disabled{opacity:0.5;cursor:not-allowed;transform:none}
+
+/* ── Code Block ── */
+.code-block{background:rgba(0,0,0,0.4);border:1px solid var(--border);border-radius:var(--radius);padding:20px;max-height:400px;overflow:auto;font-family:'JetBrains Mono',monospace;font-size:12px;line-height:1.7;color:#8b8ba8;white-space:pre-wrap;word-break:break-all;position:relative}
 .code-block::-webkit-scrollbar{width:5px}
-.code-block::-webkit-scrollbar-thumb{background:rgba(233,75,158,0.2);border-radius:4px}
-.toast{position:fixed;top:24px;right:24px;padding:14px 24px;border-radius:10px;font-size:14px;font-weight:600;z-index:9999;transform:translateX(120%);transition:transform .4s cubic-bezier(.68,-.55,.27,1.55);backdrop-filter:blur(16px);border:1px solid rgba(255,255,255,0.1)}
+.code-block::-webkit-scrollbar-track{background:transparent}
+.code-block::-webkit-scrollbar-thumb{background:rgba(233,75,158,0.15);border-radius:4px}
+.code-block::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--pink-border),transparent)}
+
+/* ── Toast ── */
+.toast{position:fixed;top:20px;right:20px;padding:12px 20px;border-radius:var(--radius-xs);font-size:13px;font-weight:600;z-index:9999;transform:translateX(120%);transition:transform .4s cubic-bezier(.68,-.55,.27,1.55);backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,0.08);box-shadow:var(--shadow-md)}
 .toast.show{transform:translateX(0)}
-.toast.success{background:rgba(34,197,94,0.15);color:#22c55e;border-color:rgba(34,197,94,0.2)}
-.toast.error{background:rgba(239,68,68,0.15);color:#ef4444;border-color:rgba(239,68,68,0.2)}
+.toast.success{background:rgba(34,197,94,0.12);color:#22c55e;border-color:rgba(34,197,94,0.2)}
+.toast.error{background:rgba(239,68,68,0.12);color:#ef4444;border-color:rgba(239,68,68,0.2)}
 </style>
 </head>
 <body>
-<canvas id="snow"></canvas>
+<div class="bg-mesh"></div>
 <div id="app">
 <div class="login-screen" id="loginScreen">
 <div class="login-card">
-<div class="login-close">&times;</div>
-<img class="login-logo" src="logo.png" alt="VENDING">
-<div class="login-title">Sign In</div>
-<div class="login-sub">Welcome back to VENDING</div>
+<div class="login-left">
+<img src="logo.png" alt="VENDING">
+<h2>VENDING</h2>
+<p>Configuration Dashboard</p>
+</div>
+<div class="login-right">
+<h3>Welcome back</h3>
+<div class="login-sub">Sign in to configure your settings</div>
 <div class="login-field-wrap">
 <span class="login-field-icon">&#128100;</span>
 <input type="text" class="login-field" id="usernameInput" placeholder="Username" autocomplete="off" spellcheck="false">
@@ -120,45 +190,77 @@ input.num:focus{border-color:var(--pink);box-shadow:0 0 12px rgba(233,75,158,0.1
 </div>
 <div class="login-field-wrap">
 <span class="login-field-icon">&#128273;</span>
-<input type="text" class="login-field" id="keyInput" placeholder="License Key" maxlength="29" autocomplete="off" spellcheck="false">
+<input type="text" class="login-field" id="keyInput" placeholder="License Key (VEN-XXXXX-...)" maxlength="29" autocomplete="off" spellcheck="false">
 </div>
-<button class="login-btn" id="authBtn">Login</button>
+<button class="login-btn" id="authBtn">Sign In</button>
 <a class="login-link" href="#">Forgot your key? Contact admin</a>
 <div class="login-error" id="loginError"></div>
+</div>
 </div>
 </div>
 <div class="dashboard" id="dashboard">
 <div class="dash-row">
 <div class="sidebar">
-<div class="sidebar-logo">
-<img class="v-logo-img" src="logo.png" alt="VENDING">
-<div class="v-title">VENDING</div>
+<div class="sidebar-header">
+<img src="logo.png" alt="VENDING">
+<div class="brand">VEND<span class="brand-dot">ING</span></div>
 </div>
+<div class="sidebar-search"><input type="text" id="searchInput" placeholder="Search features..." autocomplete="off"></div>
 <div class="sidebar-nav" id="sidebarNav">
-<div class="sidebar-search"><input type="text" id="searchInput" placeholder="Search..." autocomplete="off"></div>
+<div class="nav-group">
+<div class="nav-group-label">Aim</div>
 <div class="nav-item active" data-page="silent">Silent Aimbot</div>
 <div class="nav-item" data-page="camera">Camera Aimbot</div>
 <div class="nav-item" data-page="trigger">Trigger Bot</div>
+</div>
+<div class="nav-group">
+<div class="nav-group-label">Visuals</div>
 <div class="nav-item" data-page="esp">ESP</div>
 <div class="nav-item" data-page="skins">Skin Changer</div>
+</div>
+<div class="nav-group">
+<div class="nav-group-label">Combat</div>
 <div class="nav-item" data-page="spread">Spread Mods</div>
 <div class="nav-item" data-page="hitbox">Hitbox Expander</div>
+</div>
+<div class="nav-group">
+<div class="nav-group-label">Macro</div>
 <div class="nav-item" data-page="macro">Normal Macro</div>
 <div class="nav-item" data-page="noclip">Noclip Macro</div>
+</div>
+<div class="nav-group">
+<div class="nav-group-label">System</div>
 <div class="nav-item" data-page="conditions">Conditions</div>
 <div class="nav-item" data-page="generate">Generate Script</div>
 </div>
 </div>
+<div class="sidebar-footer">
+<div class="sidebar-user">
+<div class="sidebar-user-avatar" id="sidebarAvatar">V</div>
+<div class="sidebar-user-info">
+<div class="sidebar-user-name" id="sidebarUserName">User</div>
+<div class="sidebar-user-status">Online</div>
+</div>
+</div>
+</div>
+</div>
 <div style="flex:1;display:flex;flex-direction:column;overflow:hidden">
 <div class="topbar">
+<div class="topbar-left">
 <div class="topbar-title" id="topbarTitle">Silent Aimbot</div>
+<div class="topbar-breadcrumb">Dashboard / Aim</div>
+</div>
+<div class="topbar-right">
+<div class="topbar-badge">v1.0</div>
 <div class="topbar-profile">
 <div class="topbar-avatar" id="topbarAvatar">V</div>
 <div class="topbar-name" id="topbarName">User</div>
 <div class="topbar-arrow">&#9662;</div>
 </div>
 </div>
-<div class="content" id="contentArea"><!-- Silent Aimbot -->
+</div>
+<div class="content" id="contentArea">
+<!-- Silent Aimbot -->
 <div class="page active" id="page-silent">
 <div class="page-header"><h2>Silent Aimbot</h2><p>Configure silent aim assistance settings</p></div>
 <div class="settings-panel">
@@ -472,7 +574,7 @@ input.num:focus{border-color:var(--pink);box-shadow:0 0 12px rgba(233,75,158,0.1
 
 <!-- Noclip Macro -->
 <div class="page" id="page-noclip">
-<div class="page-header"><h2>Noclip Macro</h2><p>Configure noclip macro settings</div>
+<div class="page-header"><h2>Noclip Macro</h2><p>Configure noclip macro settings</p></div>
 <div class="settings-panel">
 <div class="section-title">General</div>
 <div class="setting-row">
@@ -528,7 +630,8 @@ input.num:focus{border-color:var(--pink);box-shadow:0 0 12px rgba(233,75,158,0.1
 <div class="settings-panel">
 <button class="gen-btn" id="genBtn">Generate &amp; Copy Script</button>
 <div class="section-title">Output</div>
-<div class="code-block" id="codeOutput">-- Click "Generate & Copy Script" to generate your script</div>
+<div class="code-block" id="codeOutput">-- Click "Generate & Copy Script" to generate your configured script</div>
+</div>
 </div>
 </div>
 </div>
@@ -596,8 +699,8 @@ cameraFovBox.Parent = CoreGui
 local cameraFovSize = Vector3.new(cameraConfig['FOV']['X'], cameraConfig['FOV']['Y'], cameraConfig['FOV']['Z'])
 
 -- [[ States ]]
-local lastUpdate = 0
 local updateInterval = 0.2
+local lastUpdate = 0
 local lastAutoGetUp = 0
 local autoGetUpInterval = 0.1
 local lastSpreadToggle = 0
@@ -611,7 +714,7 @@ local lastNoClipToggle = 0
 local spreadModActive = true
 local lastGunName = nil
 local lastEquippedGun = nil
-local visibilityCache = {} -- { [character] = { time, result } }
+local visibilityCache = {}
 local Plr = nil
 local Locking = false
 local lockCooldown = 0
@@ -898,1304 +1001,239 @@ local function GetEquippedGunName()
     return nil
 end
 
-local function restoreHitboxSizes()
-    for _, player in pairs(Players:GetPlayers()) do
-        if player ~= LocalPlayer and player.Character then
-            for _, bodyPart in pairs(player.Character:GetChildren()) do
-                if bodyPart:IsA('Part') and originalSizes[bodyPart] then
-                    bodyPart.Size = originalSizes[bodyPart]
-                end
-            end
+local function RestoreHitboxes()
+    for part, size in pairs(originalSizes) do
+        if part and part.Parent then
+            part.Size = size
+            part.Transparency = 0
         end
     end
+    originalSizes = {}
 end
 
-local function handleHitboxExpander()
-    if not hitboxConfig['Enabled'] then
-        restoreHitboxSizes()
-        return
-    end
-    local equippedGun = GetEquippedGunName()
-    if equippedGun ~= lastEquippedGun then
-        lastEquippedGun = equippedGun
-        if not equippedGun or not hitboxConfig['Config'][equippedGun] then
-            restoreHitboxSizes()
-            return
-        end
-        local config = hitboxConfig['Config'][equippedGun]
-        local heightMultiplier = config.H
-        local widthMultiplier = config.W
-        for _, player in pairs(Players:GetPlayers()) do
-            if player ~= LocalPlayer and player.Character then
-                for _, bodyPart in pairs(player.Character:GetChildren()) do
-                    if bodyPart:IsA('Part') then
-                        if not originalSizes[bodyPart] then
-                            originalSizes[bodyPart] = bodyPart.Size
-                        end
-                        local originalSize = originalSizes[bodyPart]
-                        bodyPart.Size = Vector3.new(originalSize.X * widthMultiplier, originalSize.Y * heightMultiplier, originalSize.Z)
-                    end
-                end
-            end
+local function ExpandHitboxes()
+    RestoreHitboxes()
+    local character = LocalPlayer.Character
+    if not character then return end
+    local gunName = GetEquippedGunName()
+    if not gunName then return end
+    local config = hitboxConfig['Config'][gunName]
+    if not config then return end
+    for _, part in ipairs(character:GetChildren()) do
+        if part:IsA("BasePart") and part.Name ~= "HumanoidRootPart" then
+            originalSizes[part] = part.Size
+            part.Size = Vector3.new(part.Size.X * config['W'], part.Size.Y * config['H'], part.Size.Z * config['W'])
+            part.Transparency = 0.7
         end
     end
-end
-
--- [[ Trigger Bot ]]
-local function mouse1press(x, y)
-    local mousePos = UserInputService:GetMouseLocation()
-    if VirtualInputManager then
-        VirtualInputManager:SendMouseButtonEvent(mousePos.X, mousePos.Y, 0, true, game, 1)
-    end
-end
-
-local function mouse1release(x, y)
-    local mousePos = UserInputService:GetMouseLocation()
-    if VirtualInputManager then
-        VirtualInputManager:SendMouseButtonEvent(mousePos.X, mousePos.Y, 0, false, game, 1)
-    end
-end
-
-local function simulateClick(mousePos, triggerBotConfig)
-    local start_delay = tonumber(triggerBotConfig['Start'])
-    local end_delay = tonumber(triggerBotConfig['End'])
-    if triggerBotConfig['Config']['Mode'] == 'Randomized' then
-        start_delay = math.random() * (start_delay - end_delay) + end_delay
-        end_delay = math.random() * (start_delay - end_delay) + end_delay
-    end
-    mouse1press(mousePos.X, mousePos.Y)
-    task.wait(start_delay)
-    mouse1release(mousePos.X, mousePos.Y)
-    task.wait(end_delay)
-end
-
-local function isCursorOverPlayer()
-    local target = Mouse.Target
-    if target then
-        local character = target.Parent
-        local humanoid = character:FindFirstChildOfClass('Humanoid')
-        if humanoid and character ~= LocalPlayer.Character then
-            local player = Players:GetPlayerFromCharacter(character)
-            if player and triggerConfig['Config']['Part'] == 'ClosestPart' then
-                return IsValidTarget(character)
-            end
-        end
-    end
-    return false
-end
-
--- [[ Trigger Bot Input ]]
-UserInputService.InputBegan:Connect(function(input, gameProcessed)
-    if gameProcessed then return end
-    local triggerKey = Enum.KeyCode[triggerConfig['Keybind']['Key']]
-    if input.KeyCode == triggerKey and triggerConfig['Enabled'] and triggerConfig['Keybind']['Mode'] == 'Hold' then
-        spawn(function()
-            while UserInputService:IsKeyDown(triggerKey) do
-                if isCursorOverPlayer() then
-                    local mousePos = UserInputService:GetMouseLocation()
-                    simulateClick(mousePos, triggerConfig)
-                end
-                task.wait(0.02)
-            end
-        end)
-    end
-end)
-
--- [[ Normal Macro ]]
-local function builtin_macro_function()
-    if not macroActive or not macroConfig['Enabled'] then return end
-    if macro_in_use or os.clock() - last_macro_instruction < tonumber(macroConfig['Delay']) then return end
-    macro_in_use = true
-    if VirtualInputManager then
-        local delay = tonumber(macroConfig['Delay']) / 2
-        VirtualInputManager:SendMouseWheelEvent(0, 0, true, game)
-        task.wait(delay)
-        VirtualInputManager:SendMouseWheelEvent(0, 0, false, game)
-        task.wait(delay)
-    else
-        LocalPlayer.CameraMaxZoomDistance = 30
-        task.wait()
-        LocalPlayer.CameraMinZoomDistance = 0.5
-    end
-    last_macro_instruction = os.clock()
-    macro_in_use = false
 end
 
 -- [[ Noclip Macro ]]
-local function getNoClipTool(slot)
-    local robloxGui = CoreGui:FindFirstChild('RobloxGui')
-    if not robloxGui then return nil end
-    local backpack = robloxGui:FindFirstChild('Backpack')
-    if not backpack then return nil end
-    local hotbar = backpack:FindFirstChild('Hotbar')
-    if not hotbar then return nil end
-    for _, v in pairs(hotbar:GetChildren()) do
-        if v.Name:find(tostring(slot)) then
-            return v.ToolName.Text
+local function ToggleNoClip()
+    local character = LocalPlayer.Character
+    if not character then return end
+    for _, part in ipairs(character:GetDescendants()) do
+        if part:IsA("BasePart") then
+            part.CanCollide = noClipActive
         end
     end
-    return nil
 end
 
-local function handleNoClip()
-    if not noclipMacroConfig['Enabled'] then
-        noClipActive = false
-        return
-    end
-    local char = LocalPlayer.Character
-    if not char then
-        noClipActive = false
-        return
-    end
-    local hum = char:FindFirstChildOfClass('Humanoid')
-    if not hum then
-        noClipActive = false
-        return
-    end
-    local currentTime = os.clock()
-    if currentTime - lastNoClipToggle < tonumber(noclipMacroConfig['Delay']) then
-        return
-    end
-    if noClipActive then
-        local toolName = getNoClipTool(noclipMacroConfig['Slot'])
-        if toolName and LocalPlayer.Backpack:FindFirstChild(toolName) then
-            hum:EquipTool(LocalPlayer.Backpack:FindFirstChild(toolName))
-        else
-            hum:UnequipTools()
-        end
-        lastNoClipToggle = currentTime
-    elseif hum:GetState() == Enum.HumanoidStateType.RunningNoPhysics then
-        hum:UnequipTools()
-    end
-end
-
--- [[ Camera Aimbot Logic ]]
-local function IsSelfKnocked()
-    if not cameraConfig['Configurations']['Safety'] then
-        return false
-    end
+-- [[ Macro ]]
+local function handleMacro(currentTime)
+    if not macroActive or not macroConfig['Enabled'] then return end
+    if currentTime - last_macro_instruction < macroConfig['Delay'] then return end
+    last_macro_instruction = currentTime
     local character = LocalPlayer.Character
-    if not character then
-        return true
-    end
-    local effects = character:FindFirstChild('BodyEffects')
-    if not effects then
-        return true
-    end
-    local ko = effects:FindFirstChild('K.O') or effects:FindFirstChild('KO')
-    return ko and ko.Value or false
-end
-
-local function IsReloading()
-    if not cameraConfig['Configurations']['Safety'] then
-        return true
-    end
-    local character = LocalPlayer.Character
-    if not character then
-        return true
-    end
-    local bodyEffects = character:FindFirstChild('BodyEffects')
-    if not bodyEffects then
-        return true
-    end
-    local reload = bodyEffects:FindFirstChild('Reload')
-    return reload and not reload.Value or true
-end
-
-local function DisableOnThirdPerson()
-    if not cameraConfig['Configurations']['Safety'] then
-        return true
-    end
-    return (Camera.CFrame.Position - Camera.Focus.Position).Magnitude < 0.7
-        and UserInputService.MouseBehavior == Enum.MouseBehavior.LockCenter
-end
-
-local function CheckHoldingGun()
-    if not cameraConfig['Configurations']['Safety'] then
-        return true
-    end
-    local character = LocalPlayer.Character
-    if not character then
-        return false
-    end
+    if not character then return end
     local humanoid = character:FindFirstChildOfClass('Humanoid')
-    if not humanoid then
-        return false
-    end
-    local tool = character:FindFirstChildOfClass('Tool')
-    return tool and tool.Name ~= '[Knife]' or false
-end
-
-local function IsBehindWall(target)
-    if not target or not cameraConfig['Configurations']['Safety'] then
-        return false
-    end
-    local origin = Camera.CFrame.Position
-    local targetPos = target.Position
-    local direction = (targetPos - origin).Unit * 1000
-    local params = RaycastParams.new()
-    params.FilterDescendantsInstances = { LocalPlayer.Character or {} }
-    params.FilterType = Enum.RaycastFilterType.Blacklist
-    local ray = workspace:Raycast(origin, direction, params)
-    return ray and ray.Instance and not ray.Instance:IsDescendantOf(target.Parent)
-end
-
-local function getClosestPlayerToCursor(allowNewTarget)
-    local maxDistance = 240
-    local minDistance = 0
-    local fovSize = cameraConfig['FOV']['X']
-
-    if IsSelfKnocked() then
-        Plr = nil
-        Locking = false
-        return nil
-    end
-
-    if Plr and Plr.Character and Plr.Character:FindFirstChild('HumanoidRootPart') and Plr.Character:FindFirstChild('Humanoid') then
-        local root = Plr.Character.HumanoidRootPart
-        local distance = (root.Position - Camera.CFrame.Position).Magnitude
-        local screenPos, cameraVisible = Camera:WorldToViewportPoint(root.Position)
-        local mousePos = Vector2.new(UserInputService:GetMouseLocation().X, UserInputService:GetMouseLocation().Y)
-        local distToMouse = (mousePos - Vector2.new(screenPos.X, screenPos.Y)).Magnitude
-
-        if distance > maxDistance or distance < minDistance or distToMouse > fovSize or not IsValidTarget(Plr.Character) or IsBehindWall(root) or (cameraConfig['Configurations']['Safety'] and not IsReloading()) or (cameraConfig['Configurations']['Safety'] and not DisableOnThirdPerson()) or (cameraConfig['Configurations']['Safety'] and not CheckHoldingGun()) then
-            Plr = nil
-            Locking = false
-            lockCooldown = os.clock() + 0.2
-            return nil
-        end
-
-        if cameraVisible then
-            return Plr
-        end
-    end
-
-    if not allowNewTarget or os.clock() < lockCooldown then
-        return nil
-    end
-
-    local closestDist = math.huge
-    local closestPlr = nil
-    for _, v in ipairs(Players:GetPlayers()) do
-        if v ~= LocalPlayer and v.Character and v.Character:FindFirstChild('Humanoid') and v.Character.Humanoid.Health > 0 then
-            if not IsValidTarget(v.Character) then
-                continue
-            end
-            local root = v.Character:FindFirstChild('HumanoidRootPart')
-            if not root then
-                continue
-            end
-            if IsBehindWall(root) then
-                continue
-            end
-            if cameraConfig['Configurations']['Safety'] and not IsReloading() then
-                continue
-            end
-            if cameraConfig['Configurations']['Safety'] and not DisableOnThirdPerson() then
-                continue
-            end
-            if cameraConfig['Configurations']['Safety'] and not CheckHoldingGun() then
-                continue
-            end
-
-            local distance = (root.Position - Camera.CFrame.Position).Magnitude
-            if distance > maxDistance or distance < minDistance then
-                continue
-            end
-
-            local screenPos, cameraVisible = Camera:WorldToViewportPoint(root.Position)
-            if cameraVisible then
-                local mousePos = Vector2.new(UserInputService:GetMouseLocation().X, UserInputService:GetMouseLocation().Y)
-                local distToMouse = (mousePos - Vector2.new(screenPos.X, screenPos.Y)).Magnitude
-                if distToMouse <= fovSize and distToMouse < closestDist then
-                    closestPlr = v
-                    closestDist = distToMouse
-                end
-            end
-        end
-    end
-    return closestPlr
-end
-
-local function SmoothAim(targetPos)
-    if not targetPos then
-        return
-    end
-    local currentCFrame = Camera.CFrame
-    local targetCFrame = CFrame.new(currentCFrame.Position, targetPos)
-
-    local distance = Plr and Plr.Character and Plr.Character:FindFirstChild('HumanoidRootPart') and (Plr.Character.HumanoidRootPart.Position - Camera.CFrame.Position).Magnitude or 200
-    local smoothFactor = math.clamp(cameraConfig['Configurations']['Snappiness'], 0.01, 1)
-
-    local elasticFactor = math.clamp(smoothFactor * 0.5, 0.01, 0.5)
-    local sineFactor = math.clamp(smoothFactor, 0.01, 1)
-    local smoothCFrame = currentCFrame:Lerp(targetCFrame, elasticFactor, Enum.EasingStyle.Elastic, Enum.EasingDirection.Out)
-    smoothCFrame = smoothCFrame:Lerp(targetCFrame, sineFactor, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut)
-
-    Camera.CFrame = smoothCFrame
-    if MainEvent then
-        MainEvent:FireServer('UpdateMousePosI', targetPos)
+    if not humanoid or humanoid.Health <= 0 then return end
+    local hrp = character:FindFirstChild('HumanoidRootPart')
+    if not hrp then return end
+    if macroConfig['Mode'] == 'ThirdPerson' then
+        hrp.CFrame = hrp.CFrame * CFrame.new(0, 0, -3)
+    else
+        hrp.CFrame = hrp.CFrame * CFrame.new(0, 0, -1)
     end
 end
 
-local lastMousePos = Vector2.new(Mouse.X, Mouse.Y)
-local function UpdateMousePos()
-    local currentMousePos = Vector2.new(Mouse.X, Mouse.Y)
-    if currentMousePos ~= lastMousePos then
-        lastMousePos = currentMousePos
-        return true
-    end
-    return false
-end
+-- [[ Main Loop ]]
+RunService.Heartbeat:Connect(function()
+    local currentTime = tick()
+    handleAutoGetUp(currentTime)
+    handleMacro(currentTime)
 
--- [[ Other Input Handling ]]
+    if currentTime - lastUpdate < updateInterval then return end
+    lastUpdate = currentTime
+
+    UpdateValidPlayers()
+
+    local character = LocalPlayer.Character
+    if not character then return end
+    local hrp = character:FindFirstChild('HumanoidRootPart')
+    if not hrp then return end
+
+    silentFovBox.Adornee = hrp
+    silentFovBox.Size = silentFovSize
+    silentFovBox.Visible = silentConfig['Enabled']
+
+    cameraFovBox.Adornee = hrp
+    cameraFovBox.Size = cameraFovSize
+    cameraFovBox.Visible = cameraConfig['Enabled']
+
+    local gunName = GetSpreadGunName()
+    if gunName ~= lastGunName then
+        lastGunName = gunName
+    end
+
+    if hitboxConfig['Enabled'] then
+        ExpandHitboxes()
+    else
+        RestoreHitboxes()
+    end
+
+    ToggleNoClip()
+end)
+
+-- [[ Input Handling ]]
 UserInputService.InputBegan:Connect(function(input, gameProcessed)
     if gameProcessed then return end
-    local currentTime = tick()
-    if input.KeyCode == cameraKey and cameraConfig['Enabled'] and cameraConfig['Configurations']['Bind']['Mode'] == 'Hold' then
-        -- Handled in RenderStepped
-    elseif input.KeyCode == cameraKey and cameraConfig['Enabled'] and cameraConfig['Configurations']['Bind']['Mode'] == 'Toggle' then
-        aimAssistToggleState = not aimAssistToggleState
-    elseif input.KeyCode == macroKey and macroConfig['Enabled'] and macroConfig['Keybind']['Mode'] == 'Hold' then
-        macroActive = true
-    elseif input.KeyCode == noclipKey and noclipMacroConfig['Enabled'] and noclipMacroConfig['Keybind']['Mode'] == 'Hold' then
-        noClipActive = true
-    elseif input.KeyCode == spreadKey and spreadConfig['Enabled'] and currentTime - lastSpreadToggle >= toggleDebounce then
-        lastSpreadToggle = currentTime
-        spreadModActive = not spreadModActive
-        PlaySound(spreadModActive and 'rbxassetid://1788243907' or 'rbxassetid://9125609918', spreadModActive and 1 or 2)
-    elseif input.KeyCode == cleanupKey then
-        Cleanup()
+
+    if input.KeyCode == cleanupKey then
+        RestoreHitboxes()
+        silentFovBox.Visible = false
+        cameraFovBox.Visible = false
+    end
+
+    if input.KeyCode == macroKey then
+        if macroConfig['Keybind']['Mode'] == 'Toggle' then
+            macroActive = not macroActive
+        else
+            macroActive = true
+        end
+    end
+
+    if input.KeyCode == noclipKey then
+        if noclipMacroConfig['Keybind']['Mode'] == 'Toggle' then
+            noClipActive = not noClipActive
+        else
+            noClipActive = true
+        end
+    end
+
+    if input.KeyCode == cameraKey then
+        if cameraConfig['Configurations']['Bind']['Mode'] == 'Toggle' then
+            aimAssistToggleState = not aimAssistToggleState
+            Locking = aimAssistToggleState
+        else
+            Locking = true
+        end
+        if Locking then
+            Plr = GetClosestPlayer()
+        end
+    end
+
+    if input.KeyCode == triggerKey then
+        if triggerConfig['Keybind']['Mode'] == 'Toggle' then
+            spreadModActive = not spreadModActive
+        end
     end
 end)
 
-UserInputService.InputEnded:Connect(function(input)
-    if input.KeyCode == macroKey and macroConfig['Enabled'] and macroConfig['Keybind']['Mode'] == 'Hold' then
+UserInputService.InputEnded:Connect(function(input, gameProcessed)
+    if gameProcessed then return end
+    if input.KeyCode == macroKey and macroConfig['Keybind']['Mode'] == 'Hold' then
         macroActive = false
-    elseif input.KeyCode == noclipKey and noclipMacroConfig['Enabled'] and noclipMacroConfig['Keybind']['Mode'] == 'Hold' then
+    end
+    if input.KeyCode == noclipKey and noclipMacroConfig['Keybind']['Mode'] == 'Hold' then
         noClipActive = false
-        local hum = LocalPlayer.Character and LocalPlayer.Character:FindFirstChildOfClass('Humanoid')
-        if hum and hum:GetState() == Enum.HumanoidStateType.RunningNoPhysics then
-            hum:UnequipTools()
-        end
+    end
+    if input.KeyCode == cameraKey and cameraConfig['Configurations']['Bind']['Mode'] == 'Hold' then
+        Locking = false
+        Plr = nil
     end
 end)
 
--- [[ Silent Aimbot Hook ]]
-local mt = getrawmetatable(game) -- Get the metatable of the game
-local oldIndex = mt.__index
-setreadonly(mt, false)
-mt.__index = newcclosure(function(self, idx)
-    if not checkcaller() and self == Mouse and silentConfig['Enabled'] then
-        local char = GetClosestPlayer()
-        if char and IsMouseInFOVBox(char, silentConfig['FOV']) then
-            local point, part = GetClosestPointFromPoints(char)
-            if point and part then
-                if idx == "Hit" then return CFrame.new(point) end
-                if idx == "Target" then return part end
-            end
-        end
-    end
-    return oldIndex(self, idx)
-end)
-setreadonly(mt, true)
-
--- [[ Update Loop ]]
-RunService.RenderStepped:Connect(function(deltaTime)
-    local currentTime = tick()
-
-    -- Update player list and hitboxes periodically
-    if currentTime - lastUpdate >= updateInterval then
-        UpdateValidPlayers()
-        handleHitboxExpander()
-        lastUpdate = currentTime
-        lastGunName = GetSpreadGunName() -- Update cached gun name
-    end
-
-    -- Silent Aimbot FOV Box
+-- [[ Aim Logic ]]
+RunService.RenderStepped:Connect(function()
+    if not Locking or not Plr then return end
+    local character = Plr.Character
+    if not character then Locking = false; Plr = nil; return end
+    local targetPart = nil
     if silentConfig['Enabled'] then
-        local silentChar = GetClosestPlayer()
-        if silentChar and silentChar:FindFirstChild("HumanoidRootPart") then
-            local hrp = silentChar:FindFirstChild("HumanoidRootPart")
-            silentFovBox.Adornee = hrp
-            if silentFovBox.Size ~= silentFovSize then
-                silentFovBox.Size = silentFovSize
-            end
-        else
-            silentFovBox.Adornee = nil
-        end
-    else
-        silentFovBox.Adornee = nil
-    end
-
-    -- Camera Aimbot FOV Box
-    if cameraConfig['Enabled'] then
-        local cameraChar = GetClosestPlayer()
-        if cameraChar and cameraChar:FindFirstChild("HumanoidRootPart") then
-            local hrp = cameraChar:FindFirstChild("HumanoidRootPart")
-            cameraFovBox.Adornee = hrp
-            if cameraFovBox.Size ~= cameraFovSize then
-                cameraFovBox.Size = cameraFovSize
-            end
-        else
-            cameraFovBox.Adornee = nil
-        end
-    else
-        cameraFovBox.Adornee = nil
-    end
-
-    -- Camera Aimbot Logic
-    if cameraConfig['Enabled'] then
-        local mode = cameraConfig['Configurations']['Bind']['Mode']
-        local keyPressed = UserInputService:IsKeyDown(cameraKey)
-        if mode == 'Hold' then
-            if keyPressed then
-                if not Locking and os.clock() >= lockCooldown then
-                    Plr = getClosestPlayerToCursor(true)
-                    Locking = Plr ~= nil
-                end
+        if IsMouseInFOVBox(character, silentConfig['FOV']) then
+            if silentConfig['HitPart'] == 'ClosestPoint' then
+                targetPart = GetClosestPointFromPoints(character)
             else
-                Plr = nil
-                Locking = false
-                lockCooldown = os.clock() + 0.2
-            end
-        elseif mode == 'Toggle' then
-            if not aimAssistToggleState then
-                Plr = nil
-                Locking = false
-            elseif not Locking and os.clock() >= lockCooldown then
-                Plr = getClosestPlayerToCursor(true)
-                Locking = Plr ~= nil
-            end
-        end
-
-        if Locking and Plr and Plr.Character and Plr.Character:FindFirstChild('Humanoid') then
-            local root = Plr.Character:FindFirstChild('HumanoidRootPart')
-            if not root then
-                Plr = nil
-                Locking = false
-                aimAssistToggleState = false
-                lockCooldown = os.clock() + 0.2
-                return
-            end
-
-            local distance = (root.Position - Camera.CFrame.Position).Magnitude
-            local screenPos, cameraVisible = Camera:WorldToViewportPoint(root.Position)
-            local mousePos = Vector2.new(UserInputService:GetMouseLocation().X, UserInputService:GetMouseLocation().Y)
-            local distToMouse = (mousePos - Vector2.new(screenPos.X, screenPos.Y)).Magnitude
-            local fovSize = cameraConfig['FOV']['X']
-
-            if distance > 210 or distance < 1 or distToMouse > fovSize or not IsValidTarget(Plr.Character) or IsBehindWall(root) or (cameraConfig['Configurations']['Safety'] and not IsReloading()) or (cameraConfig['Configurations']['Safety'] and not DisableOnThirdPerson()) or (cameraConfig['Configurations']['Safety'] and not CheckHoldingGun()) then
-                Plr = nil
-                Locking = false
-                aimAssistToggleState = false
-                lockCooldown = os.clock() + 0.2
-                return
-            end
-
-            local targetPos = nil
-            if cameraConfig['Part'] == 'ClosestPart' then
-                if UpdateMousePos() or not targetPos then
-                    local part = getClosestPartToCursor(Plr)
-                    if part then
-                        targetPos = part.Position
-                    end
-                end
-            end
-
-            if targetPos then
-                SmoothAim(targetPos)
-            else
-                Plr = nil
-                Locking = false
-                aimAssistToggleState = false
-                lockCooldown = os.clock() + 0.2
+                targetPart = character:FindFirstChild(silentConfig['HitPart'])
             end
         end
     end
-
-    -- Macro and Noclip
-    if macroConfig['Enabled'] then builtin_macro_function() end
-    if noclipMacroConfig['Enabled'] then handleNoClip() end
-    handleAutoGetUp(currentTime)
+    if not targetPart then
+        targetPart = getClosestPartToCursor(Plr)
+    end
+    if not targetPart then return end
+    local snappiness = cameraConfig['Configurations']['Snappiness'] or 0.041
+    local targetCFrame = Camera.CFrame:Lerp(CFrame.new(Camera.CFrame.Position, targetPart.Position), snappiness)
+    Camera.CFrame = targetCFrame
 end)
-
--- List of sound IDs to disable
-local targetSoundIds = {
-    'rbxassetid://1583819337',
-    'rbxassetid://287062939',
-    'rbxassetid://3855292863',
-    'rbxassetid://3012391142',
-}
-
-local player = game.Players.LocalPlayer
-local runService = game:GetService('RunService')
-
--- Function to disable target sounds
-local function disableSound(sound)
-    if sound:IsA('Sound') and table.find(targetSoundIds, sound.SoundId) then
-        sound.Volume = 0
-        sound:Stop()
-    end
-end
-
--- Disable existing sounds
-for _, obj in pairs(workspace:GetDescendants()) do
-    disableSound(obj)
-end
-
--- Disable new sounds
-workspace.DescendantAdded:Connect(disableSound)
-
--- Function to hide head and continuously remove face
-local function hideHead(character)
-    local head = character:WaitForChild('Head')
-
-    -- Make head transparent
-    if head:IsA('MeshPart') or head:IsA('Part') then
-        head.Transparency = 1
-    end
-
-    -- Continuously destroy any decals or textures on head
-    task.spawn(function()
-        while head.Parent do
-            for _, child in pairs(head:GetChildren()) do
-                if child:IsA('Decal') or child:IsA('Texture') then
-                    child:Destroy()
-                end
-            end
-            task.wait(0.1) -- Check every 0.1s to remove any respawned face
-        end
-    end)
-end
-
--- Handle respawns
-player.CharacterAdded:Connect(hideHead)
-if player.Character then
-    hideHead(player.Character)
-end
-
--- [[ Dependencies ]] --
-local success, DeepFakePosition = pcall(function()
-    return loadstring(game:HttpGet("https://raw.githubusercontent.com/Nosssa/NossLock/main/GetRealMousePosition"))()
-end)
-if not success or not DeepFakePosition then
-    warn("loaded :)")
-end
-
--- [[ Services & Vars ]] --
-local Players = game:GetService("Players")
-local UserInputService = game:GetService("UserInputService")
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
-local LocalPlayer = Players.LocalPlayer
-local Mouse = LocalPlayer:GetMouse()
-local MainEvent = ReplicatedStorage:FindFirstChild("MainEvent") or nil
-
--- [[ Anti-Aimview Config ]] --
-local AntiAimview = {
-    Enabled = true,
-    ToggleKey = Enum.KeyCode.G,
-    GameArgs = {
-        [2788229376] = "UpdateMousePosI2", -- Da Hood
-        [71123788828242] = "D3RHooDMSOUEPoS233^+", -- Der Hood
-        [5602055394] = "MousePosDHM"
-    },
-    DefaultArg = "UpdateMousePosI2"
-}
-
--- [[ Utility Functions ]] --
-local function RandomOffset(value)
-    return type(value) == "number" and math.random(-value, value) or 0
-end
-
--- [[ Toggle Anti-Aimview ]] --
-UserInputService.InputBegan:Connect(function(input, gameProcessed)
-    if not gameProcessed and input.KeyCode == AntiAimview.ToggleKey then
-        AntiAimview.Enabled = not AntiAimview.Enabled
-        print("Anti-Aimview " .. (AntiAimview.Enabled and "Enabled" or "Disabled"))
-    end
-end)
-
--- [[ Anti-Aimview Hook ]] --
-local grm = getrawmetatable(game)
-local namecall = grm.__namecall
-setreadonly(grm, false)
-
-grm.__namecall = function(self, ...)
-    local args = {...}
-    local method = getnamecallmethod()
-    local targetArg = AntiAimview.GameArgs[game.PlaceId] or AntiAimview.DefaultArg
-
-    if not checkcaller() and AntiAimview.Enabled and method == "FireServer" and self == MainEvent and args[1] == targetArg then
-        if _G.FetchPosition then
-            args[2] = _G.FetchPosition() + Vector3.new(RandomOffset(1), RandomOffset(1), RandomOffset(1))
-            return namecall(self, unpack(args))
-        end
-    end
-    return namecall(self, ...)
-end
-
--- [[ Client-Side Cleanup ]] --
-local function Cleanup()
-    setreadonly(grm, true)
-    grm.__namecall = namecall
-    print("Anti-Aimview script cleaned up.")
-end
-
--- [[ Manual Shutdown Trigger ]] --
-UserInputService.InputBegan:Connect(function(input, gameProcessed)
-    if not gameProcessed and input.KeyCode == Enum.KeyCode.End then -- Press 'End' to manually clean up
-        Cleanup()
-    end
-end)
-
-
-local InventoryChanger = { Functions = {}, Selected = {}, Skins = {}, Owned = {} };
-
-
-local function createLoyaltyCheatIntro()
-    local player = game.Players.LocalPlayer
-    local playerGui = player:WaitForChild("PlayerGui")
-    
-    local screenGui = Instance.new("ScreenGui")
-    screenGui.Name = "LoyaltyIntro"
-    screenGui.ResetOnSpawn = false
-    screenGui.Parent = playerGui
-    
-    local mainFrame = Instance.new("Frame")
-    mainFrame.Size = UDim2.new(0, 520, 0, 180)
-    mainFrame.Position = UDim2.new(0.5, -260, 0.35, 0)
-    mainFrame.BackgroundTransparency = 1
-    mainFrame.Parent = screenGui
-    
-    local title = Instance.new("TextLabel")
-    title.Size = UDim2.new(1, 0, 0.68, 0)
-    title.BackgroundTransparency = 1
-    title.Text = "LOYALTY"
-    title.TextColor3 = Color3.fromRGB(255, 215, 0)
-    title.TextScaled = true
-    title.Font = Enum.Font.Arcade
-    title.TextStrokeTransparency = 0
-    title.TextStrokeColor3 = Color3.fromRGB(0, 0, 0)
-    title.Parent = mainFrame
-    
-    local sub = Instance.new("TextLabel")
-    sub.Size = UDim2.new(1, 0, 0.32, 0)
-    sub.Position = UDim2.new(0, 0, 0.7, 0)
-    sub.BackgroundTransparency = 1
-    sub.Text = "BEST • CHEAT • UNDETECTED"
-    sub.TextColor3 = Color3.fromRGB(200, 200, 200)
-    sub.TextScaled = true
-    sub.Font = Enum.Font.GothamBold
-    sub.TextTransparency = 1
-    sub.Parent = mainFrame
-    
-    local line = Instance.new("Frame")
-    line.Size = UDim2.new(0, 0, 0, 4)
-    line.Position = UDim2.new(0, 0, 1, -6)
-    line.BackgroundColor3 = Color3.fromRGB(255, 0, 100)
-    line.BorderSizePixel = 0
-    line.Parent = mainFrame
-    
-    local TweenService = game:GetService("TweenService")
-    local TS = TweenService
-    
-    -- Strong entrance
-    TS:Create(title, TweenInfo.new(0.6, Enum.EasingStyle.Back), {TextTransparency = 0}):Play()
-    TS:Create(sub, TweenInfo.new(1.2, Enum.EasingStyle.Quint), {TextTransparency = 0}):Play()
-    TS:Create(line, TweenInfo.new(1.4, Enum.EasingStyle.Quint), {Size = UDim2.new(1, 0, 0, 4)}):Play()
-    
-    -- Smooth powerful rainbow
-    task.spawn(function()
-        local hue = 0
-        while title.Parent do
-            hue = (hue + 0.01) % 1
-            title.TextColor3 = Color3.fromHSV(hue, 1, 1)
-            task.wait(0.025)
-        end
-    end)
-    
-    -- Exit after show
-    task.delay(3.4, function()
-        TS:Create(title, TweenInfo.new(0.6), {TextTransparency = 1}):Play()
-        TS:Create(sub, TweenInfo.new(0.6), {TextTransparency = 1}):Play()
-        TS:Create(line, TweenInfo.new(0.6), {Size = UDim2.new(0, 0, 0, 4)}):Play()
-        
-        task.delay(0.9, function()
-            screenGui:Destroy()
-        end)
-    end)
-end
-
-createLoyaltyCheatIntro()
-
-local Players = game:GetService("Players")
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
-local Workspace = workspace
-local Self = Players.LocalPlayer
-
-local config = (shared.Saved or {})["Skin Changer"] or {
-    Enabled = true,
-    Skins = {
-        ["[Double-Barrel SG]"] = "Galaxy",
-        ["[Revolver]"] = "Galaxy",
-        ["[TacticalShotgun]"] = "Galaxy",
-        ["[Knife]"] = "Emerald",
-    },
-}
--- retard for knife skins you need this
-local KnifeSkins = {
-    ["Golden Age Tanto"] = {
-        soundid = "rbxassetid://5917819099",
-        animationid = "rbxassetid://13473404819",
-        positionoffset = Vector3.new(0, -0.20, -1.2),
-        rotationoffset = Vector3.new(90, 263.7, 180)
-    },
-    ["GPO-Knife"] = {
-        soundid = "rbxassetid://4604390759",
-        animationid = "rbxassetid://14014278925",
-        positionoffset = Vector3.new(0.00, -0.32, -1.07),
-        rotationoffset = Vector3.new(90, -97.4, 90)
-    },
-    ["GPO-Knife Prestige"] = {
-        soundid = "rbxassetid://4604390759",
-        animationid = "rbxassetid://14014278925",
-        positionoffset = Vector3.new(0.00, -0.32, -1.07),
-        rotationoffset = Vector3.new(90, -97.4, 90)
-    },
-    ["Heaven"] = {
-        soundid = "rbxassetid://14489860007",
-        animationid = "rbxassetid://14500266726",
-        positionoffset = Vector3.new(-0.02, -0.82, 0.20),
-        rotationoffset = Vector3.new(64.42, 3.79, 0.00)
-    },
-    ["Love Kukri"] = {
-        soundid = "",
-        animationid = "",
-        positionoffset = Vector3.new(-0.14, 0.14, -1.62),
-        rotationoffset = Vector3.new(-90.00, 180.00, -4.97),
-        particle = true,
-        textureid = "rbxassetid://12124159284"
-    },
-    ["Purple Dagger"] = {
-        soundid = "rbxassetid://17822743153",
-        animationid = "rbxassetid://17824999722",
-        positionoffset = Vector3.new(-0.13, -0.24, -1.80),
-        rotationoffset = Vector3.new(89.05, 96.63, 180.00)
-    },
-    ["Blue Dagger"] = {
-        soundid = "rbxassetid://17822737046",
-        animationid = "rbxassetid://17824995184",
-        positionoffset = Vector3.new(-0.13, -0.24, -1.80),
-        rotationoffset = Vector3.new(89.05, 96.63, 180.00)
-    },
-    ["Green Dagger"] = {
-        soundid = "rbxassetid://17822741762",
-        animationid = "rbxassetid://17825004320",
-        positionoffset = Vector3.new(-0.13, -0.24, -1.07),
-        rotationoffset = Vector3.new(89.05, 96.63, 180.00)
-    },
-    ["Red Dagger"] = {
-        soundid = "rbxassetid://17822952417",
-        animationid = "rbxassetid://17825008844",
-        positionoffset = Vector3.new(-0.13, -0.24, -1.07),
-        rotationoffset = Vector3.new(89.05, 96.63, 180.00)
-    },
-    ["Portal"] = {
-        soundid = "rbxassetid://16058846352",
-        animationid = "rbxassetid://16058633881",
-        positionoffset = Vector3.new(-0.13, -0.35, -0.57),
-        rotationoffset = Vector3.new(89.05, 96.63, 180.00)
-    },
-    ["Emerald Butterfly"] = {
-        soundid = "rbxassetid://14931902491",
-        animationid = "rbxassetid://14918231706",
-        positionoffset = Vector3.new(-0.02, -0.30, -0.65),
-        rotationoffset = Vector3.new(180.00, 90.95, 180.00)
-    },
-    ["Boy"] = {
-        soundid = "rbxassetid://18765078331",
-        animationid = "rbxassetid://18789158908",
-        positionoffset = Vector3.new(-0.02, -0.09, -0.73),
-        rotationoffset = Vector3.new(89.05, -88.11, 180.00)
-    },
-    ["Girl"] = {
-        soundid = "rbxassetid://18765078331",
-        animationid = "rbxassetid://18789162944",
-        positionoffset = Vector3.new(-0.02, -0.16, -0.73),
-        rotationoffset = Vector3.new(89.05, -88.11, 180.00)
-    },
-    ["Dragon"] = {
-        soundid = "rbxassetid://14217789230",
-        animationid = "rbxassetid://14217804400",
-        positionoffset = Vector3.new(-0.02, -0.32, -0.98),
-        rotationoffset = Vector3.new(89.05, 90.95, 180.00)
-    },
-    ["Void"] = {
-        soundid = "rbxassetid://14756591763",
-        animationid = "rbxassetid://14774699952",
-        positionoffset = Vector3.new(-0.02, -0.22, -0.85),
-        rotationoffset = Vector3.new(180.00, 90.95, 180.00)
-    },
-    ["Wild West"] = {
-        soundid = "rbxassetid://16058689026",
-        animationid = "rbxassetid://16058148839",
-        positionoffset = Vector3.new(-0.02, -0.24, -1.15),
-        rotationoffset = Vector3.new(-91.89, 90.95, 180.00)
-    },
-    ["Iced Out"] = {
-        soundid = "rbxassetid://14924261405",
-        animationid = "rbxassetid://18465353361",
-        positionoffset = Vector3.new(0.02, -0.08, 0.99),
-        rotationoffset = Vector3.new(180.00, -90.95, -180.00)
-    },
-    ["Reptile"] = {
-        soundid = "rbxassetid://18765103349",
-        animationid = "rbxassetid://18788955930",
-        positionoffset = Vector3.new(-0.03, -0.06, -0.92),
-        rotationoffset = Vector3.new(168.63, 90.00, -180.00)
-    },
-    ["Emerald"] = {
-        soundid = "",
-        animationid = "",
-        positionoffset = Vector3.new(-0.03, -0.06, -0.92),
-        rotationoffset = Vector3.new(168.63, 90.00, 108.00)
-    },
-    ["Ribbon"] = {
-        soundid = "rbxassetid://130974579277249",
-        animationid = "rbxassetid://124102609796063",
-        positionoffset = Vector3.new(0.02, -0.25, -0.05),
-        rotationoffset = Vector3.new(90.00, 0.00, 180.00)
-    },
-}
-
-local KnifeData = {}
-
-local function ClearKnife(tool)
-    if not tool or not tool:FindFirstChild("Default") then
-        return
-    end
-
-    local mesh = tool.Default
-    local data = KnifeData[tool]
-
-    if data then
-        if data.track then
-            data.track:Stop()
-            data.track:Destroy()
-        end
-        if data.welds then
-            for _, weld in ipairs(data.welds) do
-                if weld then
-                    weld:Destroy()
-                end
-            end
-        end
-        if data.sounds then
-            for _, sound in ipairs(data.sounds) do
-                if sound and sound.Parent then
-                    sound:Destroy()
-                end
-            end
-        end
-    end
-
-    for _, child in ipairs(mesh:GetChildren()) do
-        if child.Name == "Handle.R" or child:IsA("Model") or (child:IsA("BasePart") and child.Name ~= "Default") then
-            child:Destroy()
-        end
-    end
-
-    mesh.Transparency = 0
-    KnifeData[tool] = nil
-end
-
-local function ApplyKnifeSkin(char, tool, skinName)
-    local cfg = KnifeSkins[skinName]
-    if not cfg then
-        return
-    end
-
-    ClearKnife(tool)
-    KnifeData[tool] = { welds = {}, sounds = {} }
-    local data = KnifeData[tool]
-
-    local mesh = tool:FindFirstChild("Default")
-    if not mesh then
-        return
-    end
-    mesh.Transparency = 1
-
-    local rightHand = char:FindFirstChild("RightHand")
-    if not rightHand then
-        return
-    end
-
-    local handleR = Instance.new("Part")
-    handleR.Name = "Handle.R"
-    handleR.Transparency = 1
-    handleR.CanCollide = false
-    handleR.Anchored = false
-    handleR.Size = Vector3.new(0.001, 0.001, 0.001)
-    handleR.Massless = true
-    handleR.Parent = mesh
-
-    local motor = Instance.new("Motor6D")
-    motor.Name = "Handle.R"
-    motor.Part0 = rightHand
-    motor.Part1 = handleR
-    motor.Parent = handleR
-
-    local offset = CFrame.new(cfg.positionoffset) * CFrame.Angles(
-        math.rad(cfg.rotationoffset.X),
-        math.rad(cfg.rotationoffset.Y),
-        math.rad(cfg.rotationoffset.Z)
-    )
-
-    local skinModules = ReplicatedStorage:FindFirstChild("SkinModules")
-    if not skinModules then
-        return
-    end
-
-    local knivesFolder = skinModules:FindFirstChild("Knives")
-    if not knivesFolder then
-        return
-    end
-
-    local skinModel = knivesFolder:FindFirstChild(skinName)
-    if not skinModel then
-        return
-    end
-
-    local clone = skinModel:Clone()
-    clone.Name = skinName
-
-    if clone:IsA("Model") then
-        if not clone.PrimaryPart then
-            for _, v in ipairs(clone:GetChildren()) do
-                if v:IsA("BasePart") then
-                    clone.PrimaryPart = v
-                    break
-                end
-            end
-        end
-
-        if clone.PrimaryPart then
-            for _, part in ipairs(clone:GetDescendants()) do
-                if part:IsA("BasePart") then
-                    part.CanCollide = false
-                    part.Massless = true
-                    part.Anchored = false
-
-                    local weld = Instance.new("Weld")
-                    weld.Part0 = handleR
-                    weld.Part1 = part
-                    weld.C0 = offset
-                    weld.C1 = part.CFrame:ToObjectSpace(clone.PrimaryPart.CFrame)
-                    weld.Parent = part
-                    table.insert(data.welds, weld)
-                end
-            end
-        end
-
-        clone.Parent = mesh
-    elseif clone:IsA("BasePart") then
-        clone.CanCollide = false
-        clone.Massless = true
-        clone.Anchored = false
-
-        if clone:IsA("MeshPart") and cfg.textureid then
-            clone.TextureID = cfg.textureid
-        end
-
-        clone.Parent = mesh
-
-        local weld = Instance.new("Weld")
-        weld.Part0 = handleR
-        weld.Part1 = clone
-        weld.C0 = offset
-        weld.Parent = clone
-        table.insert(data.welds, weld)
-    end
-
-    local humanoid = char:FindFirstChildOfClass("Humanoid")
-    if humanoid and cfg.animationid and cfg.animationid ~= "" then
-        local animator = humanoid:FindFirstChildOfClass("Animator") or Instance.new("Animator", humanoid)
-        local anim = Instance.new("Animation")
-        anim.AnimationId = cfg.animationid
-        local track = animator:LoadAnimation(anim)
-        track.Looped = false
-        track:Play()
-        data.track = track
-
-        track.Ended:Once(function()
-            if data.track == track then
-                data.track = nil
-            end
-        end)
-    end
-
-    if cfg.soundid and cfg.soundid ~= "" then
-        local sound = Instance.new("Sound")
-        sound.SoundId = cfg.soundid
-        sound.Parent = Workspace
-        sound:Play()
-        table.insert(data.sounds, sound)
-        sound.Ended:Connect(function()
-            sound:Destroy()
-        end)
-    end
-
-    tool:SetAttribute("CurrentKnifeSkin", skinName)
-end
-
-local function ApplyGunSkin(tool, skinName)
-    local orig = tool:FindFirstChildOfClass("MeshPart")
-    if not orig then
-        return
-    end
-
-    local skinModules = ReplicatedStorage:FindFirstChild("SkinModules")
-    if not skinModules then
-        return
-    end
-
-    local success, skinData = pcall(function()
-        return require(skinModules)
-    end)
-
-    if not success or not skinData then
-        return
-    end
-
-    local info = skinData[tool.Name] and skinData[tool.Name][skinName]
-    if not info then
-        return
-    end
-
-    for _, v in ipairs(tool:GetChildren()) do
-        if v:IsA("MeshPart") and v ~= orig then
-            v:Destroy()
-        end
-    end
-
-    local skinPart = info.TextureID
-    if typeof(skinPart) == "Instance" then
-        local clone = skinPart:Clone()
-        clone.Parent = tool
-        clone.CFrame = orig.CFrame
-        clone.Name = "CurrentSkin"
-
-        local weld = Instance.new("Weld")
-        weld.Part0 = clone
-        weld.Part1 = orig
-        weld.C0 = info.CFrame:Inverse()
-        weld.Parent = clone
-
-        orig.Transparency = 1
-    else
-        orig.TextureID = skinPart
-        orig.Transparency = 0
-    end
-
-    local handle = tool:FindFirstChild("Handle")
-    if handle then
-        handle:SetAttribute("SkinName", skinName)
-    end
-end
-
-local function ApplyBatSkin(tool, skinName)
-    local mesh = nil
-    for _, v in ipairs(tool:GetDescendants()) do
-        if v:IsA("MeshPart") and v.Transparency == 0 then
-            mesh = v
-            break
-        end
-    end
-    if not mesh then
-        return
-    end
-
-    local batsFolder = ReplicatedStorage:FindFirstChild("SkinModules") and
-        ReplicatedStorage.SkinModules:FindFirstChild("Bats")
-    if not batsFolder then
-        return
-    end
-
-    local skin = batsFolder:FindFirstChild(skinName)
-    if not skin then
-        return
-    end
-
-    local clone = skin:Clone()
-    clone.Parent = tool
-    clone.CFrame = mesh.CFrame
-    clone.Name = "CurrentSkin"
-
-    local weld = Instance.new("Weld")
-    weld.Part0 = clone
-    weld.Part1 = mesh
-    weld.Parent = clone
-
-    mesh.Transparency = 1
-end
-
-local function SetupTool(tool)
-    if not tool:IsA("Tool") or tool:GetAttribute("GlorySkinSetup") then
-        return
-    end
-    tool:SetAttribute("GlorySkinSetup", true)
-
-    local skinConfig = shared.Saved and shared.Saved["Skin Changer"] or config
-    if not skinConfig or not skinConfig.Enabled then
-        return
-    end
-
-    local skinName = skinConfig.Skins and skinConfig.Skins[tool.Name]
-    if not skinName or skinName == "" then
-        return
-    end
-
-    tool.Equipped:Connect(function()
-        if tool.Parent ~= Self.Character then
-            return
-        end
-
-        if tool.Name == "[Knife]" then
-            ApplyKnifeSkin(Self.Character, tool, skinName)
-        elseif tool.Name == "[Bat]" then
-            ApplyBatSkin(tool, skinName)
-        else
-            ApplyGunSkin(tool, skinName)
-        end
-    end)
-
-    if tool.Parent == Self.Character then
-        task.spawn(function()
-            if tool.Name == "[Knife]" then
-                ApplyKnifeSkin(Self.Character, tool, skinName)
-            elseif tool.Name == "[Bat]" then
-                ApplyBatSkin(tool, skinName)
-            else
-                ApplyGunSkin(tool, skinName)
-            end
-        end)
-    end
-end
-
-Self.CharacterAdded:Connect(function(char)
-    char.ChildAdded:Connect(function(child)
-        if child:IsA("Tool") then
-            SetupTool(child)
-        end
-    end)
-end)
-
-if Self.Character then
-    for _, tool in ipairs(Self.Character:GetChildren()) do
-        if tool:IsA("Tool") then
-            SetupTool(tool)
-        end
-    end
-end
-
-for _, tool in ipairs(Self.Backpack:GetChildren()) do
-    if tool:IsA("Tool") then
-        SetupTool(tool)
-    end
-end
-
-Self.Backpack.ChildAdded:Connect(SetupTool)
-
-return {
-    config = config,
-    ApplyKnifeSkin = ApplyKnifeSkin,
-    ApplyGunSkin = ApplyGunSkin,
-    ApplyBatSkin = ApplyBatSkin,
-    SetupTool = SetupTool,
-}
 </script>
-
 <script>
-const C = {
-    cond: { knocked: true, reloading: true, visible: true, protected: true },
-    silent: { enabled: false, hitPart: 'ClosestPoint', cpMode: 'Advanced', subDiv: 3, fovX: 15, fovY: 15, fovZ: 15 },
-    camera: { enabled: false, part: 'ClosestPart', snappiness: 0.041, bindKey: 'H', bindMode: 'Toggle', fovX: 50, fovY: 50, fovZ: 50 },
-    trigger: { enabled: false, key: 'V', mode: 'Hold', part: 'ClosestPart', configMode: 'Normal', start: 0.02, end: 0.08 },
-    skins: { enabled: true, db: 'Galaxy', rev: 'Galaxy', tac: 'Galaxy', knife: 'Emerald' },
-    spread: { enabled: false, method: 'randomized', dbSpread: 0.75, dbMin: 0.75, dbMax: 0.75, tacSpread: 0.75, tacMin: 0.75, tacMax: 0.75, drumSpread: 0, drumMin: 0, drumMax: 0 },
-    hitbox: { enabled: false, dbH: 2, dbW: 2, revH: 2, revW: 2, tacH: 2, tacW: 2 },
-    macro: { enabled: false, key: 'Q', bindMode: 'Hold', delay: 0.020, macroMode: 'FirstPerson' },
-    noclip: { enabled: false, key: 'B', bindMode: 'Hold', delay: 0.03, slot: 3 },
-    esp: { enabled: false, box: true, name: true, health: true, distance: true, tracers: false, teamCheck: true, boxType: 'Corner', maxDist: 1000 }
-};
-
-function getConfigValue(path) {
-    const parts = path.split('.');
-    let obj = C;
-    for (let i = 0; i < parts.length - 1; i++) obj = obj[parts[i]];
-    return obj[parts[parts.length - 1]];
-}
-
-function setConfigValue(path, val) {
-    const parts = path.split('.');
-    let obj = C;
-    for (let i = 0; i < parts.length - 1; i++) obj = obj[parts[i]];
-    obj[parts[parts.length - 1]] = val;
-}
-
-function syncUIToConfig() {
-    document.querySelectorAll('[data-config]').forEach(el => {
-        const path = el.dataset.config;
-        const val = getConfigValue(path);
-        if (el.type === 'checkbox') el.checked = !!val;
-        else el.value = val;
-    });
-}
-
-function syncConfigFromUI() {
-    document.querySelectorAll('[data-config]').forEach(el => {
-        const path = el.dataset.config;
-        let val;
-        if (el.type === 'checkbox') val = el.checked;
-        else if (el.type === 'number') val = parseFloat(el.value);
-        else val = el.value;
-        setConfigValue(path, val);
-    });
-}
-
-document.querySelectorAll('[data-config]').forEach(el => {
-    el.addEventListener('change', syncConfigFromUI);
-    el.addEventListener('input', syncConfigFromUI);
-});
+(function(){
+const API_BASE = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+    ? 'http://localhost:5000' : '';
 
 const loginScreen = document.getElementById('loginScreen');
 const dashboard = document.getElementById('dashboard');
-const keyInput = document.getElementById('keyInput');
 const usernameInput = document.getElementById('usernameInput');
 const passwordInput = document.getElementById('passwordInput');
+const keyInput = document.getElementById('keyInput');
 const authBtn = document.getElementById('authBtn');
 const loginError = document.getElementById('loginError');
 const genBtn = document.getElementById('genBtn');
 const codeOutput = document.getElementById('codeOutput');
 let currentKey = '';
 let currentUser = '';
-const API_BASE = window.location.hostname === 'localhost' ? '' : 'https://your-server-url.com';
 
-const B64='ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';
-function encryptToB64(plaintext){
-    const bytes=new Uint8Array(plaintext.length);
-    for(let i=0;i<plaintext.length;i++) bytes[i]=(plaintext.charCodeAt(i)+42)%256;
-    let out='';
-    for(let i=0;i<bytes.length;i+=3){
-        const a=bytes[i], b=i+1<bytes.length?bytes[i+1]:0, c=i+2<bytes.length?bytes[i+2]:0;
-        out+=B64[(a>>2)&63];
-        out+=B64[((a&3)<<4)|(b>>4)&15];
-        out+=(i+1<bytes.length)?B64[((b&15)<<2)|(c>>6)&3]:'=';
-        out+=(i+2<bytes.length)?B64[c&63]:'=';
-    }
-    return out;
+const C = {
+    silent: { enabled:false, hitPart:'ClosestPoint', cpMode:'Advanced', subDiv:3, fovX:15, fovY:15, fovZ:15 },
+    camera: { enabled:false, part:'ClosestPart', snappiness:0.041, bindKey:'H', bindMode:'Toggle', fovX:50, fovY:50, fovZ:50 },
+    trigger: { enabled:false, key:'V', mode:'Hold', part:'ClosestPart', configMode:'Normal', start:0.02, end:0.08 },
+    esp: { enabled:false, box:false, name:false, health:false, distance:false, tracers:false, teamCheck:false, boxType:'Corner', maxDist:1000 },
+    skins: { enabled:false, db:'Galaxy', rev:'Galaxy', tac:'Galaxy', knife:'Emerald' },
+    spread: { enabled:false, method:'randomized', dbSpread:0.75, dbMin:0.75, dbMax:0.75, tacSpread:0.75, tacMin:0.75, tacMax:0.75, drumSpread:0, drumMin:0, drumMax:0 },
+    hitbox: { enabled:false, dbH:2, dbW:2, revH:2, revW:2, tacH:2, tacW:2 },
+    macro: { enabled:false, key:'Q', bindMode:'Hold', delay:0.02, macroMode:'FirstPerson' },
+    noclip: { enabled:false, key:'B', bindMode:'Hold', delay:0.03, slot:3 },
+    cond: { knocked:true, reloading:true, visible:true, protected:true }
+};
+
+function syncConfigFromUI() {
+    document.querySelectorAll('[data-config]').forEach(el => {
+        const path = el.dataset.config.split('.');
+        let obj = C;
+        for (let i = 0; i < path.length - 1; i++) obj = obj[path[i]];
+        const key = path[path.length - 1];
+        if (el.type === 'checkbox') obj[key] = el.checked;
+        else if (el.type === 'number') obj[key] = parseFloat(el.value);
+        else obj[key] = el.value;
+    });
 }
+
+function syncUIToConfig() {
+    document.querySelectorAll('[data-config]').forEach(el => {
+        const path = el.dataset.config.split('.');
+        let obj = C;
+        for (let i = 0; i < path.length - 1; i++) obj = obj[path[i]];
+        const key = path[path.length - 1];
+        if (el.type === 'checkbox') el.checked = !!obj[key];
+        else if (el.type === 'number') el.value = obj[key];
+        else el.value = obj[key];
+    });
+}
+
+document.getElementById('topbarAvatar').textContent = (currentUser || 'V').charAt(0).toUpperCase();
+document.getElementById('sidebarAvatar').textContent = (currentUser || 'V').charAt(0).toUpperCase();
 
 authBtn.addEventListener('click', doLogin);
 keyInput.addEventListener('keydown', e => { if (e.key === 'Enter') doLogin(); });
@@ -2236,6 +1274,8 @@ function doLogin() {
             syncUIToConfig();
             document.getElementById('topbarName').textContent = username;
             document.getElementById('topbarAvatar').textContent = username.charAt(0).toUpperCase();
+            document.getElementById('sidebarUserName').textContent = username;
+            document.getElementById('sidebarAvatar').textContent = username.charAt(0).toUpperCase();
             showToast('Logged in as ' + username, 'success');
         } else {
             loginError.textContent = data.reason || 'Login failed';
@@ -2251,6 +1291,8 @@ function doLogin() {
         syncUIToConfig();
         document.getElementById('topbarName').textContent = username;
         document.getElementById('topbarAvatar').textContent = username.charAt(0).toUpperCase();
+        document.getElementById('sidebarUserName').textContent = username;
+        document.getElementById('sidebarAvatar').textContent = username.charAt(0).toUpperCase();
         showToast('Logged in offline (server unavailable)', 'success');
     });
 }
@@ -2262,6 +1304,8 @@ keyInput.addEventListener('input', () => {
 
 const navItems = document.querySelectorAll('.nav-item');
 const topbarTitle = document.getElementById('topbarTitle');
+const topbarBreadcrumb = document.querySelector('.topbar-breadcrumb');
+const groupLabels = { silent:'Aim', camera:'Aim', trigger:'Aim', esp:'Visuals', skins:'Visuals', spread:'Combat', hitbox:'Combat', macro:'Macro', noclip:'Macro', conditions:'System', generate:'System' };
 navItems.forEach(item => {
     item.addEventListener('click', () => {
         navItems.forEach(n => n.classList.remove('active'));
@@ -2270,6 +1314,7 @@ navItems.forEach(item => {
         const page = document.getElementById('page-' + item.dataset.page);
         if (page) page.classList.add('active');
         if (topbarTitle) topbarTitle.textContent = item.textContent;
+        if (topbarBreadcrumb) topbarBreadcrumb.textContent = 'Dashboard / ' + (groupLabels[item.dataset.page] || 'System');
     });
 });
 
@@ -2433,45 +1478,7 @@ function generateScript() {
 }
 
 genBtn.addEventListener('click', generateScript);
-// Snow Animation
-const canvas = document.getElementById('snow');
-const ctx = canvas.getContext('2d');
-let snowflakes = [];
-function resizeCanvas() {
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
-}
-resizeCanvas();
-window.addEventListener('resize', resizeCanvas);
-class Snowflake {
-    constructor() { this.reset(); this.y = Math.random() * canvas.height; }
-    reset() {
-        this.x = Math.random() * canvas.width;
-        this.y = -10;
-        this.r = Math.random() * 2.5 + 0.5;
-        this.speed = Math.random() * 0.8 + 0.2;
-        this.wind = Math.random() * 0.4 - 0.2;
-        this.opacity = Math.random() * 0.4 + 0.1;
-    }
-    update() {
-        this.y += this.speed;
-        this.x += this.wind;
-        if (this.y > canvas.height + 10 || this.x < -10 || this.x > canvas.width + 10) this.reset();
-    }
-    draw() {
-        ctx.beginPath();
-        ctx.arc(this.x, this.y, this.r, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(255,255,255,${this.opacity})`;
-        ctx.fill();
-    }
-}
-for (let i = 0; i < 80; i++) snowflakes.push(new Snowflake());
-function animateSnow() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    snowflakes.forEach(s => { s.update(); s.draw(); });
-    requestAnimationFrame(animateSnow);
-}
-animateSnow();
+})();
 </script>
 </body>
 </html>
