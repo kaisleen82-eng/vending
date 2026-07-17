@@ -166,5 +166,23 @@
     "username": "testing",
     "password": "a665a45920422f9d417e4867efdc4fb8a04a1f3fff1fa07e998e86f7f7a27ae3",
     "registered": true
+  },
+  "VEN-E514A-3DD88-7814C-28297": {
+    "key": "VEN-E514A-3DD88-7814C-28297",
+    "type": "lifetime",
+    "type_label": "Lifetime",
+    "created_at": 1784293056.7243595,
+    "created_date": "2026-07-17 15:57:36",
+    "expires_at": null,
+    "hwid": null,
+    "hwid_bound": false,
+    "redeemed": false,
+    "redeemed_by": null,
+    "redeemed_at": null,
+    "revoked": false,
+    "note": "",
+    "username": null,
+    "password": null,
+    "registered": false
   }
 }
