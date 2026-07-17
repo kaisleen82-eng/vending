@@ -148,5 +148,23 @@
     "username": "imtesting",
     "password": "707c54b045f55328257d667ad96e88507e77adfdbf62cb0ef0f1c71929a7f90d",
     "registered": true
+  },
+  "VEN-8CAA3-C8075-BCBD2-FA382": {
+    "key": "VEN-8CAA3-C8075-BCBD2-FA382",
+    "type": "lifetime",
+    "type_label": "Lifetime",
+    "created_at": 1784291726.3438115,
+    "created_date": "2026-07-17 15:35:26",
+    "expires_at": null,
+    "hwid": null,
+    "hwid_bound": false,
+    "redeemed": false,
+    "redeemed_by": null,
+    "redeemed_at": null,
+    "revoked": false,
+    "note": "",
+    "username": null,
+    "password": null,
+    "registered": false
   }
 }
