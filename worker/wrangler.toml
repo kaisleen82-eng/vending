@@ -1,0 +1,7 @@
+name = "vending-scripts"
+main = "worker.js"
+compatibility_date = "2024-01-01"
+
+[[kv_namespaces]]
+binding = "SCRIPTS"
+id = "e74422c90e6846df9ee66cbca6b8612b"
