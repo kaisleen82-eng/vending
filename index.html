@@ -149,6 +149,63 @@ input.num:focus{border-color:var(--pink);box-shadow:0 0 0 3px var(--pink-glow)}
 .toast.show{transform:translateX(0)}
 .toast.success{background:rgba(34,197,94,0.12);color:#22c55e;border-color:rgba(34,197,94,0.2)}
 .toast.error{background:rgba(239,68,68,0.12);color:#ef4444;border-color:rgba(239,68,68,0.2)}
+
+/* ── Theme Toggle ── */
+.theme-toggle{width:36px;height:36px;border-radius:var(--radius-xs);border:1px solid var(--border-light);background:var(--bg);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:var(--transition);font-size:15px;color:var(--text-dim);flex-shrink:0}
+.theme-toggle:hover{border-color:var(--pink);color:var(--pink);background:var(--pink-glow)}
+
+/* ── Light Theme ── */
+body.light{
+  --bg:#f0f0f5;--bg1:#e8e8f0;--bg2:#ffffff;--bg3:#f5f5fa;--bg4:#ebebf2;
+  --surface:rgba(255,255,255,0.9);--surface-hover:rgba(240,240,250,0.95);--surface-active:rgba(230,230,245,1);
+  --text:#1a1a2e;--text-dim:#6b6b80;--text-muted:#9999b0;
+  --border:rgba(0,0,0,0.08);--border-light:rgba(0,0,0,0.12);
+  --shadow-sm:0 2px 8px rgba(0,0,0,0.06);--shadow-md:0 4px 20px rgba(0,0,0,0.08);--shadow-lg:0 8px 40px rgba(0,0,0,0.1);
+}
+body.light .login-card{background:#fff;border-color:rgba(0,0,0,0.08)}
+body.light .login-field{background:#f5f5fa;border-color:rgba(0,0,0,0.1);color:#1a1a2e}
+body.light .login-field::placeholder{color:#9999b0}
+body.light .sidebar{background:#e8e8f0;border-right-color:rgba(0,0,0,0.08)}
+body.light .topbar{background:#e8e8f0;border-bottom-color:rgba(0,0,0,0.08)}
+body.light .topbar-title,body.light .topbar-name{color:#1a1a2e}
+body.light .topbar-badge{background:rgba(233,75,158,0.08);color:var(--pink)}
+body.light select.sel{background-color:#f5f5fa;border-color:rgba(0,0,0,0.1);color:#1a1a2e}
+body.light select.sel option{background:#fff;color:#1a1a2e}
+body.light input.num{background:#f5f5fa;border-color:rgba(0,0,0,0.1);color:#1a1a2e}
+body.light .toggle-slider{background:#ddd;border-color:rgba(0,0,0,0.12)}
+body.light .toggle-slider::before{background:#999}
+body.light .code-block{background:rgba(0,0,0,0.04);color:#333;border-color:rgba(0,0,0,0.08)}
+body.light .sidebar-nav::-webkit-scrollbar-thumb{background:rgba(233,75,158,0.2)}
+body.light .content::-webkit-scrollbar-thumb{background:rgba(233,75,158,0.2)}
+body.light .sidebar-search input{background:#f5f5fa;border-color:rgba(0,0,0,0.08);color:#1a1a2e}
+body.light .sidebar-search input::placeholder{color:#9999b0}
+body.light .settings-panel{background:rgba(255,255,255,0.9);border-color:rgba(0,0,0,0.08)}
+body.light .sidebar-user{background:rgba(0,0,0,0.03)}
+
+/* ── Presets Panel ── */
+.presets-bar{display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap;align-items:center}
+.preset-chip{padding:7px 14px;border-radius:20px;font-size:11.5px;font-weight:600;background:var(--bg);border:1px solid var(--border-light);color:var(--text-dim);cursor:pointer;transition:var(--transition);display:flex;align-items:center;gap:6px}
+.preset-chip:hover{border-color:var(--pink);color:var(--pink);background:var(--pink-glow)}
+.preset-chip.active{background:var(--pink-glow);border-color:var(--pink);color:var(--pink)}
+.preset-chip .delete-preset{font-size:13px;opacity:0.4;transition:opacity .2s;margin-left:2px}
+.preset-chip .delete-preset:hover{opacity:1;color:#ef4444}
+.preset-save-btn{padding:7px 16px;border-radius:20px;font-size:11.5px;font-weight:600;background:var(--pink);border:none;color:#fff;cursor:pointer;transition:var(--transition)}
+.preset-save-btn:hover{background:var(--pink-dark);transform:scale(1.03)}
+.preset-input{padding:7px 14px;border-radius:20px;font-size:11.5px;font-family:'Inter',sans-serif;background:var(--bg);border:1px solid var(--border-light);color:#fff;outline:none;width:160px;transition:var(--transition)}
+.preset-input:focus{border-color:var(--pink);box-shadow:0 0 0 3px var(--pink-glow)}
+.preset-input::placeholder{color:var(--text-muted)}
+body.light .preset-input{color:#1a1a2e}
+body.light .preset-input::placeholder{color:#9999b0}
+
+/* ── Profile Dropdown ── */
+.profile-dropdown{position:absolute;top:48px;right:28px;background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:16px;width:240px;z-index:100;display:none;box-shadow:var(--shadow-lg);backdrop-filter:blur(16px)}
+.profile-dropdown.show{display:block;animation:pageIn .2s ease}
+.profile-dropdown h4{font-size:11px;font-weight:700;letter-spacing:2px;color:var(--text-muted);text-transform:uppercase;margin-bottom:12px}
+.profile-row{display:flex;align-items:center;justify-content:space-between;padding:8px 0}
+.profile-row .label{font-size:12.5px;color:var(--text)}
+.profile-row .value{font-size:12.5px;color:var(--pink);font-weight:600}
+.profile-logout{width:100%;padding:9px;margin-top:12px;border:1px solid rgba(239,68,68,0.3);border-radius:var(--radius-xs);background:rgba(239,68,68,0.08);color:#ef4444;font-family:'Inter',sans-serif;font-size:12px;font-weight:600;cursor:pointer;transition:var(--transition);text-align:center}
+.profile-logout:hover{background:rgba(239,68,68,0.15);border-color:rgba(239,68,68,0.5)}
 </style>
 </head>
 <body>
@@ -225,12 +282,21 @@ input.num:focus{border-color:var(--pink);box-shadow:0 0 0 3px var(--pink-glow)}
 </div>
 <div class="topbar-right">
 <div class="topbar-badge">v1.0</div>
-<div class="topbar-profile">
+<button class="theme-toggle" id="themeToggle" title="Toggle theme">&#9681;</button>
+<div class="topbar-profile" id="topbarProfileBtn">
 <div class="topbar-avatar" id="topbarAvatar">V</div>
 <div class="topbar-name" id="topbarName">User</div>
 <div class="topbar-arrow">&#9662;</div>
 </div>
 </div>
+</div>
+<div class="profile-dropdown" id="profileDropdown">
+<h4>Profile</h4>
+<div class="profile-row"><span class="label">Username</span><span class="value" id="profileUser">-</span></div>
+<div class="profile-row"><span class="label">Key Type</span><span class="value" id="profileKeyType">-</span></div>
+<div class="profile-row"><span class="label">Saved Configs</span><span class="value" id="profileConfigs">0</span></div>
+<div class="profile-row"><span class="label">Theme</span><span class="value" id="profileTheme">Dark</span></div>
+<button class="profile-logout" id="logoutBtn">Sign Out</button>
 </div>
 <div class="content" id="contentArea">
 <!-- Silent Aimbot -->
@@ -558,6 +624,13 @@ input.num:focus{border-color:var(--pink);box-shadow:0 0 0 3px var(--pink-glow)}
 <div class="page" id="page-generate">
 <div class="page-header"><h2>Generate Script</h2><p>Generate and copy your configured script</p></div>
 <div class="settings-panel">
+<div class="section-title">Presets</div>
+<div class="presets-bar" id="presetsBar">
+<input type="text" class="preset-input" id="presetNameInput" placeholder="Preset name..." maxlength="24" autocomplete="off" spellcheck="false">
+<button class="preset-save-btn" id="presetSaveBtn">Save Current</button>
+</div>
+<div id="presetChips"></div>
+<div class="section-title" style="margin-top:20px">Generate</div>
 <button class="gen-btn" id="genBtn">Generate &amp; Copy Script</button>
 <div class="section-title">Output</div>
 <div class="code-block" id="codeOutput">-- Click "Generate & Copy Script" to generate your configured script</div>
@@ -1200,9 +1273,11 @@ function doLogin() {
         if (data.success) {
             currentKey = key;
             currentUser = username;
+            currentKeyType = data.type || 'N/A';
             loginScreen.style.display = 'none';
             dashboard.style.display = 'flex';
             syncUIToConfig();
+            renderPresets();
             document.getElementById('topbarName').textContent = username;
             document.getElementById('topbarAvatar').textContent = username.charAt(0).toUpperCase();
             document.getElementById('sidebarUserName').textContent = username;
@@ -1391,6 +1466,131 @@ function generateScript() {
 }
 
 genBtn.addEventListener('click', generateScript);
+
+// ── Theme Toggle ──
+const THEME_KEY = 'vending_theme';
+const themeToggle = document.getElementById('themeToggle');
+function applyTheme(t) {
+    if (t === 'light') { document.body.classList.add('light'); themeToggle.innerHTML = '&#9790;'; }
+    else { document.body.classList.remove('light'); themeToggle.innerHTML = '&#9681;'; }
+    localStorage.setItem(THEME_KEY, t);
+    const pt = document.getElementById('profileTheme');
+    if (pt) pt.textContent = t === 'light' ? 'Light' : 'Dark';
+}
+let savedTheme = localStorage.getItem(THEME_KEY) || 'dark';
+applyTheme(savedTheme);
+themeToggle.addEventListener('click', () => {
+    applyTheme(document.body.classList.contains('light') ? 'dark' : 'light');
+});
+
+// ── Config Presets ──
+const PRESETS_KEY = 'vending_presets';
+function getPresetsKey() { return PRESETS_KEY + '_' + (currentUser || 'guest'); }
+function loadPresets() {
+    try { return JSON.parse(localStorage.getItem(getPresetsKey())) || []; } catch(e) { return []; }
+}
+function savePresets(p) { localStorage.setItem(getPresetsKey(), JSON.stringify(p)); }
+function renderPresets() {
+    const chips = document.getElementById('presetChips');
+    const bar = document.getElementById('presetsBar');
+    if (!chips || !bar) return;
+    const presets = loadPresets();
+    chips.innerHTML = '';
+    const existing = bar.querySelectorAll('.preset-chip');
+    existing.forEach(e => e.remove());
+    presets.forEach((p, i) => {
+        const chip = document.createElement('button');
+        chip.className = 'preset-chip';
+        chip.innerHTML = '<span>' + escHtml(p.name) + '</span><span class="delete-preset" data-idx="' + i + '">&times;</span>';
+        chip.addEventListener('click', (e) => {
+            if (e.target.classList.contains('delete-preset')) {
+                const idx = parseInt(e.target.dataset.idx);
+                const pp = loadPresets(); pp.splice(idx, 1); savePresets(pp); renderPresets();
+                showToast('Preset deleted', 'success'); updateProfileConfigs();
+                return;
+            }
+            syncConfigFromUI();
+            Object.assign(C.silent, p.data.silent || {});
+            Object.assign(C.camera, p.data.camera || {});
+            Object.assign(C.trigger, p.data.trigger || {});
+            Object.assign(C.skins, p.data.skins || {});
+            Object.assign(C.spread, p.data.spread || {});
+            Object.assign(C.hitbox, p.data.hitbox || {});
+            Object.assign(C.macro, p.data.macro || {});
+            Object.assign(C.noclip, p.data.noclip || {});
+            Object.assign(C.cond, p.data.cond || {});
+            syncUIToConfig();
+            document.querySelectorAll('.preset-chip').forEach(c => c.classList.remove('active'));
+            chip.classList.add('active');
+            showToast('Loaded: ' + p.name, 'success');
+        });
+        bar.appendChild(chip);
+    });
+}
+function escHtml(s) { const d = document.createElement('div'); d.textContent = s; return d.innerHTML; }
+
+document.getElementById('presetSaveBtn').addEventListener('click', () => {
+    const input = document.getElementById('presetNameInput');
+    const name = (input.value || '').trim();
+    if (!name) { showToast('Enter a preset name', 'error'); return; }
+    syncConfigFromUI();
+    const presets = loadPresets();
+    const existing = presets.findIndex(p => p.name === name);
+    const data = JSON.parse(JSON.stringify(C));
+    if (existing >= 0) presets[existing].data = data;
+    else presets.push({ name, data });
+    savePresets(presets);
+    input.value = '';
+    renderPresets();
+    updateProfileConfigs();
+    showToast('Saved: ' + name, 'success');
+});
+
+document.getElementById('presetNameInput').addEventListener('keydown', e => {
+    if (e.key === 'Enter') document.getElementById('presetSaveBtn').click();
+});
+
+// ── Profile Dropdown ──
+const profileBtn = document.getElementById('topbarProfileBtn');
+const profileDropdown = document.getElementById('profileDropdown');
+let profileOpen = false;
+profileBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    profileOpen = !profileOpen;
+    profileDropdown.classList.toggle('show', profileOpen);
+    if (profileOpen) {
+        document.getElementById('profileUser').textContent = currentUser || '-';
+        document.getElementById('profileKeyType').textContent = currentKeyType || '-';
+        document.getElementById('profileTheme').textContent = document.body.classList.contains('light') ? 'Light' : 'Dark';
+        updateProfileConfigs();
+    }
+});
+document.addEventListener('click', (e) => {
+    if (!profileDropdown.contains(e.target) && !profileBtn.contains(e.target)) {
+        profileOpen = false;
+        profileDropdown.classList.remove('show');
+    }
+});
+
+function updateProfileConfigs() {
+    const el = document.getElementById('profileConfigs');
+    if (el) el.textContent = loadPresets().length;
+}
+let currentKeyType = 'N/A';
+
+// ── Logout ──
+document.getElementById('logoutBtn').addEventListener('click', () => {
+    currentKey = ''; currentUser = ''; currentKeyType = 'N/A';
+    dashboard.style.display = 'none';
+    loginScreen.style.display = 'flex';
+    usernameInput.value = ''; passwordInput.value = ''; keyInput.value = '';
+    profileOpen = false; profileDropdown.classList.remove('show');
+    showToast('Signed out', 'success');
+});
+
+// ── On login success, load presets & update profile ──
+const origDoLogin = doLogin;
+// presets re-render on successful login already via renderPresets in login handler
 })();
 </script>
 </body>
