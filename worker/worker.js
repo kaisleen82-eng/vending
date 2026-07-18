@@ -1019,6 +1019,7 @@ local function createVendingCheatIntro()
     local player = game.Players.LocalPlayer
     local playerGui = player:WaitForChild("PlayerGui")
     local TweenService = game:GetService("TweenService")
+    local TS = TweenService
 
     local screenGui = Instance.new("ScreenGui")
     screenGui.Name = "VendingIntro"

@@ -1019,6 +1019,7 @@ local function createVendingCheatIntro()
     local player = game.Players.LocalPlayer
     local playerGui = player:WaitForChild("PlayerGui")
     local TweenService = game:GetService("TweenService")
+    local TS = TweenService
 
     local screenGui = Instance.new("ScreenGui")
     screenGui.Name = "VendingIntro"
@@ -1131,10 +1132,6 @@ local function createVendingCheatIntro()
     statusLabel.TextXAlignment = Enum.TextXAlignment.Center
     statusLabel.TextTransparency = 1
     statusLabel.Parent = mainFrame
-
-    local function tweenTrans(obj, t, s, style)
-        TS:Create(obj, TweenInfo.new(t, style or Enum.EasingStyle.Quint, Enum.EasingDirection.Out), {TextTransparency = 0 or obj.TextTransparency and 0 or nil}):Play()
-    end
 
     overlay.BackgroundTransparency = 1
     TS:Create(overlay, TweenInfo.new(0.5, Enum.EasingStyle.Quint), {BackgroundTransparency = 0.3}):Play()
