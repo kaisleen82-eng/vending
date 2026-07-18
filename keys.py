@@ -33,12 +33,51 @@ def _save(path, data):
 
 
 def _sync_db(data):
+    import urllib.request
+    import base64
     try:
         with open(DB_JSON, "w") as f:
             json.dump(data, f, indent=2)
-        subprocess.run(["git", "add", "db.json"], capture_output=True, timeout=5)
-        subprocess.run(["git", "commit", "-m", "sync keys"], capture_output=True, timeout=5)
-        subprocess.run(["git", "push"], capture_output=True, timeout=15)
+    except Exception:
+        pass
+
+    github_token = os.environ.get("VENDING_GITHUB_TOKEN", "")
+    if not github_token:
+        try:
+            subprocess.run(["git", "add", "db.json"], capture_output=True, timeout=5)
+            subprocess.run(["git", "commit", "-m", "sync keys"], capture_output=True, timeout=5)
+            subprocess.run(["git", "push"], capture_output=True, timeout=15)
+        except Exception:
+            pass
+        return
+
+    repo = "kaisleen82-eng/vending"
+    path = "db.json"
+    url = f"https://api.github.com/repos/{repo}/contents/{path}"
+    headers = {
+        "Authorization": f"token {github_token}",
+        "Accept": "application/vnd.github.v3+json",
+        "User-Agent": "vending-bot",
+    }
+
+    try:
+        req = urllib.request.Request(url, headers=headers)
+        resp = urllib.request.urlopen(req, timeout=10)
+        existing = json.loads(resp.read().decode())
+        sha = existing.get("sha", "")
+    except Exception:
+        sha = ""
+
+    content = base64.b64encode(json.dumps(data, indent=2).encode()).decode()
+    payload = json.dumps({
+        "message": "sync keys",
+        "content": content,
+        "sha": sha,
+    }).encode()
+
+    try:
+        req = urllib.request.Request(url, data=payload, headers=headers, method="PUT")
+        urllib.request.urlopen(req, timeout=15)
     except Exception:
         pass
 
