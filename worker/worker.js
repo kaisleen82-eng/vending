@@ -1015,81 +1015,189 @@ end)
 local InventoryChanger = { Functions = {}, Selected = {}, Skins = {}, Owned = {} };
 
 
-local function createLoyaltyCheatIntro()
+local function createVendingCheatIntro()
     local player = game.Players.LocalPlayer
     local playerGui = player:WaitForChild("PlayerGui")
-    
-    local screenGui = Instance.new("ScreenGui")
-    screenGui.Name = "LoyaltyIntro"
-    screenGui.ResetOnSpawn = false
-    screenGui.Parent = playerGui
-    
-    local mainFrame = Instance.new("Frame")
-    mainFrame.Size = UDim2.new(0, 520, 0, 180)
-    mainFrame.Position = UDim2.new(0.5, -260, 0.35, 0)
-    mainFrame.BackgroundTransparency = 1
-    mainFrame.Parent = screenGui
-    
-    local title = Instance.new("TextLabel")
-    title.Size = UDim2.new(1, 0, 0.68, 0)
-    title.BackgroundTransparency = 1
-    title.Text = "LOYALTY"
-    title.TextColor3 = Color3.fromRGB(255, 215, 0)
-    title.TextScaled = true
-    title.Font = Enum.Font.Arcade
-    title.TextStrokeTransparency = 0
-    title.TextStrokeColor3 = Color3.fromRGB(0, 0, 0)
-    title.Parent = mainFrame
-    
-    local sub = Instance.new("TextLabel")
-    sub.Size = UDim2.new(1, 0, 0.32, 0)
-    sub.Position = UDim2.new(0, 0, 0.7, 0)
-    sub.BackgroundTransparency = 1
-    sub.Text = "BEST • CHEAT • UNDETECTED"
-    sub.TextColor3 = Color3.fromRGB(200, 200, 200)
-    sub.TextScaled = true
-    sub.Font = Enum.Font.GothamBold
-    sub.TextTransparency = 1
-    sub.Parent = mainFrame
-    
-    local line = Instance.new("Frame")
-    line.Size = UDim2.new(0, 0, 0, 4)
-    line.Position = UDim2.new(0, 0, 1, -6)
-    line.BackgroundColor3 = Color3.fromRGB(255, 0, 100)
-    line.BorderSizePixel = 0
-    line.Parent = mainFrame
-    
     local TweenService = game:GetService("TweenService")
+
+    local screenGui = Instance.new("ScreenGui")
+    screenGui.Name = "VendingIntro"
+    screenGui.ResetOnSpawn = false
+    screenGui.DisplayOrder = 999
+    screenGui.Parent = playerGui
+
+    local overlay = Instance.new("Frame")
+    overlay.Size = UDim2.new(1, 0, 1, 0)
+    overlay.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+    overlay.BackgroundTransparency = 0.3
+    overlay.BorderSizePixel = 0
+    overlay.Parent = screenGui
+
+    local mainFrame = Instance.new("Frame")
+    mainFrame.Size = UDim2.new(0, 460, 0, 200)
+    mainFrame.Position = UDim2.new(0.5, 0, 0.5, 0)
+    mainFrame.AnchorPoint = Vector2.new(0.5, 0.5)
+    mainFrame.BackgroundColor3 = Color3.fromRGB(12, 12, 20)
+    mainFrame.BorderSizePixel = 0
+    mainFrame.Parent = screenGui
+
+    local corner = Instance.new("UICorner")
+    corner.CornerRadius = UDim.new(0, 16)
+    corner.Parent = mainFrame
+
+    local stroke = Instance.new("UIStroke")
+    stroke.Color = Color3.fromRGB(233, 75, 158)
+    stroke.Thickness = 1.5
+    stroke.Transparency = 0.4
+    stroke.Parent = mainFrame
+
+    local glow = Instance.new("Frame")
+    glow.Size = UDim2.new(1, 40, 0, 2)
+    glow.Position = UDim2.new(0, -20, 0.62, 0)
+    glow.AnchorPoint = Vector2.new(0, 0.5)
+    glow.BackgroundColor3 = Color3.fromRGB(233, 75, 158)
+    glow.BackgroundTransparency = 0.3
+    glow.BorderSizePixel = 0
+    glow.Parent = mainFrame
+    local glowCorner = Instance.new("UICorner")
+    glowCorner.CornerRadius = UDim.new(1, 0)
+    glowCorner.Parent = glow
+
+    local logo = Instance.new("TextLabel")
+    logo.Size = UDim2.new(1, -40, 0, 72)
+    logo.Position = UDim2.new(0, 20, 0, 24)
+    logo.BackgroundTransparency = 1
+    logo.Text = "VENDING"
+    logo.TextColor3 = Color3.fromRGB(255, 255, 255)
+    logo.TextScaled = true
+    logo.Font = Enum.Font.GothamBlack
+    logo.TextXAlignment = Enum.TextXAlignment.Center
+    logo.TextStrokeTransparency = 0
+    logo.TextStrokeColor3 = Color3.fromRGB(233, 75, 158)
+    logo.TextTransparency = 1
+    logo.Parent = mainFrame
+
+    local subtitle = Instance.new("TextLabel")
+    subtitle.Size = UDim2.new(1, -40, 0, 20)
+    subtitle.Position = UDim2.new(0, 20, 0, 100)
+    subtitle.BackgroundTransparency = 1
+    subtitle.Text = "PREMIUM  •  UNDETECTED  •  SECURE"
+    subtitle.TextColor3 = Color3.fromRGB(140, 140, 165)
+    subtitle.TextScaled = true
+    subtitle.Font = Enum.Font.GothamMedium
+    subtitle.TextXAlignment = Enum.TextXAlignment.Center
+    subtitle.TextTransparency = 1
+    subtitle.Parent = mainFrame
+
+    local version = Instance.new("TextLabel")
+    version.Size = UDim2.new(1, -40, 0, 16)
+    version.Position = UDim2.new(0, 20, 0, 130)
+    version.BackgroundTransparency = 1
+    version.Text = "v1.0.0"
+    version.TextColor3 = Color3.fromRGB(80, 80, 100)
+    version.TextScaled = true
+    version.Font = Enum.Font.Gotham
+    version.TextXAlignment = Enum.TextXAlignment.Center
+    version.TextTransparency = 1
+    version.Parent = mainFrame
+
+    local barBg = Instance.new("Frame")
+    barBg.Size = UDim2.new(0.7, 0, 0, 4)
+    barBg.Position = UDim2.new(0.15, 0, 0, 160)
+    barBg.BackgroundColor3 = Color3.fromRGB(30, 30, 50)
+    barBg.BorderSizePixel = 0
+    barBg.Parent = mainFrame
+    local barBgCorner = Instance.new("UICorner")
+    barBgCorner.CornerRadius = UDim.new(1, 0)
+    barBgCorner.Parent = barBg
+
+    local barFill = Instance.new("Frame")
+    barFill.Size = UDim2.new(0, 0, 1, 0)
+    barFill.BackgroundColor3 = Color3.fromRGB(233, 75, 158)
+    barFill.BorderSizePixel = 0
+    barFill.Parent = barBg
+    local barFillCorner = Instance.new("UICorner")
+    barFillCorner.CornerRadius = UDim.new(1, 0)
+    barFillCorner.Parent = barFill
+
+    local statusLabel = Instance.new("TextLabel")
+    statusLabel.Size = UDim2.new(1, -40, 0, 14)
+    statusLabel.Position = UDim2.new(0, 20, 0, 172)
+    statusLabel.BackgroundTransparency = 1
+    statusLabel.Text = "Initializing..."
+    statusLabel.TextColor3 = Color3.fromRGB(80, 80, 100)
+    statusLabel.TextScaled = true
+    statusLabel.Font = Enum.Font.Gotham
+    statusLabel.TextXAlignment = Enum.TextXAlignment.Center
+    statusLabel.TextTransparency = 1
+    statusLabel.Parent = mainFrame
+
     local TS = TweenService
-    
-    -- Strong entrance
-    TS:Create(title, TweenInfo.new(0.6, Enum.EasingStyle.Back), {TextTransparency = 0}):Play()
-    TS:Create(sub, TweenInfo.new(1.2, Enum.EasingStyle.Quint), {TextTransparency = 0}):Play()
-    TS:Create(line, TweenInfo.new(1.4, Enum.EasingStyle.Quint), {Size = UDim2.new(1, 0, 0, 4)}):Play()
-    
-    -- Smooth powerful rainbow
+
+    overlay.BackgroundTransparency = 1
+    TS:Create(overlay, TweenInfo.new(0.5, Enum.EasingStyle.Quint), {BackgroundTransparency = 0.3}):Play()
+
+    mainFrame.BackgroundTransparency = 1
+    mainFrame.Size = UDim2.new(0, 380, 0, 160)
+    TS:Create(mainFrame, TweenInfo.new(0.7, Enum.EasingStyle.Back, Enum.EasingDirection.Out), {BackgroundTransparency = 0, Size = UDim2.new(0, 460, 0, 200)}):Play()
+
+    task.delay(0.3, function()
+        TS:Create(logo, TweenInfo.new(0.6, Enum.EasingStyle.Back), {TextTransparency = 0}):Play()
+    end)
+
+    task.delay(0.6, function()
+        TS:Create(subtitle, TweenInfo.new(0.8, Enum.EasingStyle.Quint), {TextTransparency = 0}):Play()
+        TS:Create(glow, TweenInfo.new(1.0, Enum.EasingStyle.Quint), {BackgroundTransparency = 0.3}):Play()
+    end)
+
+    task.delay(0.9, function()
+        TS:Create(version, TweenInfo.new(0.6, Enum.EasingStyle.Quint), {TextTransparency = 0}):Play()
+        TS:Create(statusLabel, TweenInfo.new(0.4, Enum.EasingStyle.Quint), {TextTransparency = 0}):Play()
+    end)
+
+    task.delay(1.2, function()
+        TS:Create(barFill, TweenInfo.new(1.8, Enum.EasingStyle.Quint, Enum.EasingDirection.Out), {Size = UDim2.new(1, 0, 1, 0)}):Play()
+    end)
+
     task.spawn(function()
-        local hue = 0
-        while title.Parent do
-            hue = (hue + 0.01) % 1
-            title.TextColor3 = Color3.fromHSV(hue, 1, 1)
-            task.wait(0.025)
+        local steps = {"Loading modules...", "Configuring aim assist", "Configuring aim assist...", "Applying skins", "Applying skins...", "Finalizing", "Finalizing..."}
+        for i, step in ipairs(steps) do
+            statusLabel.Text = step
+            task.wait(0.35)
         end
     end)
-    
-    -- Exit after show
-    task.delay(3.4, function()
-        TS:Create(title, TweenInfo.new(0.6), {TextTransparency = 1}):Play()
-        TS:Create(sub, TweenInfo.new(0.6), {TextTransparency = 1}):Play()
-        TS:Create(line, TweenInfo.new(0.6), {Size = UDim2.new(0, 0, 0, 4)}):Play()
-        
-        task.delay(0.9, function()
+
+    task.spawn(function()
+        local hue = 0.92
+        while logo.Parent do
+            hue = (hue + 0.003) % 1
+            local c = Color3.fromHSV(hue, 0.6, 1)
+            logo.TextStrokeColor3 = c
+            stroke.Color = c
+            glow.BackgroundColor3 = c
+            barFill.BackgroundColor3 = c
+            task.wait(0.03)
+        end
+    end)
+
+    task.delay(3.8, function()
+        TS:Create(logo, TweenInfo.new(0.5, Enum.EasingStyle.Quint), {TextTransparency = 1}):Play()
+        TS:Create(subtitle, TweenInfo.new(0.4, Enum.EasingStyle.Quint), {TextTransparency = 1}):Play()
+        TS:Create(version, TweenInfo.new(0.3, Enum.EasingStyle.Quint), {TextTransparency = 1}):Play()
+        TS:Create(statusLabel, TweenInfo.new(0.3, Enum.EasingStyle.Quint), {TextTransparency = 1}):Play()
+        TS:Create(stroke, TweenInfo.new(0.5, Enum.EasingStyle.Quint), {Transparency = 1}):Play()
+        TS:Create(glow, TweenInfo.new(0.4, Enum.EasingStyle.Quint), {BackgroundTransparency = 1}):Play()
+        TS:Create(barFill, TweenInfo.new(0.4, Enum.EasingStyle.Quint), {BackgroundTransparency = 1}):Play()
+        TS:Create(barBg, TweenInfo.new(0.4, Enum.EasingStyle.Quint), {BackgroundTransparency = 1}):Play()
+        TS:Create(mainFrame, TweenInfo.new(0.5, Enum.EasingStyle.Quint, Enum.EasingDirection.In), {BackgroundTransparency = 1, Size = UDim2.new(0, 500, 0, 220)}):Play()
+        TS:Create(overlay, TweenInfo.new(0.6, Enum.EasingStyle.Quint), {BackgroundTransparency = 1}):Play()
+        task.delay(0.7, function()
             screenGui:Destroy()
         end)
     end)
 end
 
-createLoyaltyCheatIntro()
+createVendingCheatIntro()
 
 local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
