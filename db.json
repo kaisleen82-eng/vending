@@ -184,5 +184,23 @@
     "username": "yo",
     "password": "e9058ab198f6908f702111b0c0fb5b36f99d00554521886c40e2891b349dc7a1",
     "registered": true
+  },
+  "VEN-7CC5E-C3A25-506A2-B2BB2": {
+    "key": "VEN-7CC5E-C3A25-506A2-B2BB2",
+    "type": "lifetime",
+    "type_label": "Lifetime",
+    "created_at": 1784381639.1597004,
+    "created_date": "2026-07-18 16:33:59",
+    "expires_at": null,
+    "hwid": null,
+    "hwid_bound": false,
+    "redeemed": false,
+    "redeemed_by": null,
+    "redeemed_at": null,
+    "revoked": false,
+    "note": "manual",
+    "username": null,
+    "password": null,
+    "registered": false
   }
 }
